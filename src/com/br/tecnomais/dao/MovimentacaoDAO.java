@@ -13,7 +13,7 @@ public class MovimentacaoDAO extends ConectaBanco {
 
     public void inserirValorMovimentacao(MovimentacaoEntity mov) throws Exception {
         conectar();
-        String sql = "INSERT INTO tb_movimentacao (VendaID, EntradaID, ContaID, Descricao, TipoMovimento, Valor, DataMovimento, ContaPagarId, Caixa) VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO tb_movimentacao (VendaID, EntradaID, ContaID, Descricao, TipoMovimento, Valor, DataMovimento, ContaPagarId, Caixa, TipoDePagamento) VALUES(?,?,?,?,?,?,?,?,?,?)";
         stmt = conn.prepareStatement(sql);
         stmt.setInt(1, mov.getIdVenda());
         stmt.setInt(2, mov.getIdEntrada());
@@ -24,6 +24,7 @@ public class MovimentacaoDAO extends ConectaBanco {
         stmt.setString(7, mov.getDataMovimento());
         stmt.setInt(8, mov.getIdContaPagar());
         stmt.setString(9, mov.getCaixa());
+        stmt.setString(10, mov.getTipoDePagamento());
         stmt.executeUpdate();
     }
 
@@ -40,6 +41,12 @@ public class MovimentacaoDAO extends ConectaBanco {
             m.setTipoMovimento(rs.getString("TipoMovimento"));
             m.setValor(rs.getDouble("Valor") / 100);
             m.setDataMovimento(rs.getString("DataMovimento"));
+            m.setIdContaPagar(rs.getInt("ContaPagarId"));
+            m.setIdVenda(rs.getInt("VendaId"));
+            m.setIdEntrada(rs.getInt("EntradaId"));
+            m.setIdContaPagar(rs.getInt("ContaId"));
+            m.setCaixa(rs.getString("Caixa"));
+            m.setTipoDePagamento(rs.getString("TipoDePagamento"));
             lista.add(m);
         }
         return lista;
@@ -89,7 +96,7 @@ public class MovimentacaoDAO extends ConectaBanco {
             mov.setIdEntrada(rs.getInt("EntradaId"));
             mov.setIdContaPagar(rs.getInt("ContaId"));
             mov.setCaixa(rs.getString("Caixa"));
-
+            mov.setTipoDePagamento(rs.getString("TipoDePagamento"));
             lista.add(mov);
         }
         return lista;
@@ -142,6 +149,7 @@ public class MovimentacaoDAO extends ConectaBanco {
             m.setIdEntrada(rs.getInt("EntradaId"));
             m.setIdContaPagar(rs.getInt("ContaId"));
             m.setCaixa(rs.getString("caixa"));
+            m.setTipoDePagamento(rs.getString("TipoDePagamento"));
             lista.add(m);
         }
         return lista;
@@ -175,7 +183,7 @@ public class MovimentacaoDAO extends ConectaBanco {
 
     public void gravarSaida(MovimentacaoEntity mov) throws Exception {
         conectar();
-        String sql = "INSERT INTO tb_movimentacao (Descricao, TipoMovimento, Valor, DataMovimento, Caixa, ContaID, ContaPagarId, EntradaId,VendaID) VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO tb_movimentacao (Descricao, TipoMovimento, Valor, DataMovimento, Caixa, ContaID, ContaPagarId, EntradaId,VendaID, TipoDePagamento) VALUES(?,?,?,?,?,?,?,?,?,?)";
         stmt = conn.prepareStatement(sql);
         stmt.setString(1, mov.getDescricao());
         stmt.setString(2, mov.getTipoMovimento());
@@ -186,6 +194,7 @@ public class MovimentacaoDAO extends ConectaBanco {
         stmt.setInt(7, mov.getIdContaPagar());
         stmt.setInt(8, mov.getIdEntrada());
         stmt.setInt(9, mov.getIdVenda());
+        stmt.setString(10, mov.getTipoDePagamento());
 
         stmt.executeUpdate();
         stmt.close();
@@ -193,7 +202,7 @@ public class MovimentacaoDAO extends ConectaBanco {
 
     public void gravarEntrada(MovimentacaoEntity mov) throws Exception {
         conectar();
-        String sql = "INSERT INTO tb_movimentacao(Descricao, TipoMovimento, Valor, DataMovimento, Caixa, ContaID, ContaPagarId, EntradaId,VendaID) VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO tb_movimentacao(Descricao, TipoMovimento, Valor, DataMovimento, Caixa, ContaID, ContaPagarId, EntradaId,VendaID, TipoDePagamento) VALUES(?,?,?,?,?,?,?,?,?,?)";
         stmt = conn.prepareStatement(sql);
         stmt.setString(1, mov.getDescricao());
         stmt.setString(2, mov.getTipoMovimento());
@@ -204,6 +213,7 @@ public class MovimentacaoDAO extends ConectaBanco {
         stmt.setInt(7, mov.getIdContaPagar());
         stmt.setInt(8, mov.getIdEntrada());
         stmt.setInt(9, mov.getIdVenda());
+        stmt.setString(10, mov.getTipoDePagamento());
         stmt.executeUpdate();
         stmt.close();
     }

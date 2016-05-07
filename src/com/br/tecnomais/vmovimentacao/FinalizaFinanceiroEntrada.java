@@ -1,6 +1,5 @@
 package com.br.tecnomais.vmovimentacao;
 
-import br.com.daruma.jna.DUAL;
 import com.br.tecnomais.classes.*;
 import com.br.tecnomais.dao.*;
 import com.br.tecnomais.entity.*;
@@ -58,6 +57,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             tfFocu.setVisible(false);
             //  setValorTotal();
             inicializaEntradaEntity = iniEntrada;
+            System.out.println("Caixa "+iniEntrada.getCaixa());
             tfVlrTotal.setText(new DecimalFormat("0.00").format(vlrTotal));
             tfCodigoFormaPagamento.requestFocus();
             setarValores();
@@ -1914,6 +1914,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             cpee.setUsuario(cpe.getUsuario());
             cpee.setEntradaId(inicializaEntradaEntity.getSequencia());
             cpee.setFornecedor(inicializaEntradaEntity.getFornecedor());
+            cpee.setCaixa(inicializaEntradaEntity.getCaixa());
             cpee.setObs("REFERENTE AO PAGAMENTO DA ENTRADA DE MERCADORIA COM A SEQUENCIA: Nº: " + cpe.getEntradaId().toString());
             
             ContaPagarDAO cpDAO = new ContaPagarDAO();
@@ -1927,7 +1928,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 cpee.setVlrPago(valorD);
                 cpee.setDescricao("PAGAMENTO DE MERCADORIAS");
                 cpeeDAO.save(cpee);
-                efetivaMovimentacaoDeEntrada(valorD);
+                efetivaMovimentacaoDeEntrada(valorD, "DINHEIRO");
                 
                 if (tfFormaPagamento2.getText().equals("PARCELADO") || tfFormaPagamento3.getText().equals("PARCELADO")) {
                     String novoVenc = tfDataVencimento.getText();
@@ -1948,12 +1949,12 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                     if (tfFormaPagamento2.getText().equals("CARTAO CREDITO")) {
                         Double valor = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
                         cpee.setVlrPago(valor);
-                        efetivaMovimentacaoDeEntrada(valor);
+                        efetivaMovimentacaoDeEntrada(valor, "CARTAO CREDITO");
                         cpee.setDescricao("PAGAMENTO DE MERCADORIAS 1x de " + new DecimalFormat().format(valor / 100));
                     } else {
                         Double valor = Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
                         cpee.setVlrPago(valor);
-                        efetivaMovimentacaoDeEntrada(valor);
+                        efetivaMovimentacaoDeEntrada(valor, "CARTAO CREDITO");
                         cpee.setDescricao("PAGAMENTO DE MERCADORIAS 1x de " + new DecimalFormat().format(valor / 100));
                     }
                     cpeeDAO.save(cpee);
@@ -1964,12 +1965,12 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                     if (tfFormaPagamento2.getText().equals("CARTAO DEBITO")) {
                         Double valorCD = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
                         cpee.setVlrPago(valorCD);
-                        efetivaMovimentacaoDeEntrada(valorCD);
+                        efetivaMovimentacaoDeEntrada(valorCD, "CARTAO DEBITO");
                     }
                     if (tfFormaPagamento3.getText().equals("CARTAO DEBITO")) {
                         Double valorCD = Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
                         cpee.setVlrPago(valorCD);
-                        efetivaMovimentacaoDeEntrada(valorCD);
+                        efetivaMovimentacaoDeEntrada(valorCD, "CARTAO DEBITO");
                     }
                     cpeeDAO.save(cpee);
                 }
@@ -1981,7 +1982,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                     Double valorD = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
                     cpee.setVlrPago(valorD);
                     cpee.setDescricao("PAGAMENTO DE MERCADORIAS");
-                    efetivaMovimentacaoDeEntrada(valorD);
+                    efetivaMovimentacaoDeEntrada(valorD, "DINHEIRO");
                     cpeeDAO.save(cpee);
                 }
                 for (int i = 0; i < intervalo; i++) {
@@ -2002,13 +2003,13 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 cpee.setVlrPago(valor);
                 cpee.setDescricao("PAGAMENTO DE MERCADORIAS" + tfParcelas.getText() + "x de " + tfVlrParcelas.getText().replace(",", "."));
                 cpeeDAO.save(cpee);
-                efetivaMovimentacaoDeEntrada(valor);
+                efetivaMovimentacaoDeEntrada(valor, "CARTAO CREDITO");
             } else if (tfFormaPagamento.getText().equals("CARTAO DEBITO")) {
                 cpee.setTipoCobranca("CARTAO DEBITO");
                 cpee.setDescricao("PAGAMENTO DE MERCADORIAS EM CARTÃO DEBITO");
                 Double valorCD = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
                 cpee.setVlrPago(valorCD);
-                efetivaMovimentacaoDeEntrada(valorCD);
+                efetivaMovimentacaoDeEntrada(valorCD, "CARTAO DEBITO");
                 cpee.setDataVencimento(cpee.getDataPagamento());
                 cpeeDAO.save(cpee);
             }
@@ -2698,7 +2699,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         return statusFinalizacao;
     }
     
-    private void efetivaMovimentacaoDeEntrada(Double valorTotal) {
+    private void efetivaMovimentacaoDeEntrada(Double valorTotal, String tipoPagamento) {
         try {
             MovimentacaoEntity mov = new MovimentacaoEntity();
             mov.setIdConta(0);
@@ -2707,7 +2708,9 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             mov.setTipoMovimento("SAIDA");
             mov.setValor(valorTotal);
             mov.setDataMovimento(lbDataAtual.getText());
+            System.out.println(" Caixa "+inicializaEntradaEntity.getCaixa());
             mov.setCaixa(inicializaEntradaEntity.getCaixa());
+            mov.setTipoDePagamento(tipoPagamento);
             MovimentacaoDAO dao = new MovimentacaoDAO();
             dao.gravarSaida(mov);
         } catch (Exception e) {

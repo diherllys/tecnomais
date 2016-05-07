@@ -21,12 +21,14 @@ public class MovimentacaoEntity {
     private Double valor;
     private String dataMovimento;
     private String caixa;
+    private String tipoDePagamento;
 
     public MovimentacaoEntity() {
         this.idVenda = 0;
         this.idEntrada = 0;
         this.idContaPagar = 0;
         this.idConta = 0;
+        this.tipoDePagamento = " ";
     }
 
     public Integer getIdMovimento() {
@@ -109,4 +111,11 @@ public class MovimentacaoEntity {
         this.caixa = caixa;
     }
 
+    public String getTipoDePagamento() {
+        return tipoDePagamento;
+    }
+
+    public void setTipoDePagamento(String tipoDePagamento) {
+        this.tipoDePagamento = tipoDePagamento;
+    }
 }
