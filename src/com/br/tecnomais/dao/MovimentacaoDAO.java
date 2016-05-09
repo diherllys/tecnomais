@@ -155,6 +155,36 @@ public class MovimentacaoDAO extends ConectaBanco {
         return lista;
     }
 
+    public List<MovimentacaoEntity> consultarPorFiltro(String descricao, String caixa, String tipoPag, String tipoMov, String dataInicial, String dataFinal) throws Exception {
+        List<MovimentacaoEntity> lista = new ArrayList<>();
+        conectar();
+        String sql = "SELECT * FROM tb_movimentacao WHERE Valor != 0.0 AND Descricao like ? AND Caixa like ? AND TipoDePagamento like ? AND TipoMovimento like ? AND convert(datetime, DataMovimento, 103) BETWEEN convert(datetime, ?, 103) AND convert(datetime, ?, 103) ORDER BY IdMovimento desc";
+        stmt = conn.prepareStatement(sql);
+        stmt.setString(1, descricao);
+        stmt.setString(2, caixa);
+        stmt.setString(3, tipoPag);
+        stmt.setString(4, tipoMov);
+        stmt.setString(5, dataInicial);
+        stmt.setString(6, dataFinal);
+        rs = stmt.executeQuery();
+        while (rs.next()) {
+            MovimentacaoEntity m = new MovimentacaoEntity();
+            m.setIdMovimento(rs.getInt("IdMovimento"));
+            m.setDescricao(rs.getString("Descricao"));
+            m.setTipoMovimento(rs.getString("TipoMovimento"));
+            m.setValor(rs.getDouble("Valor") / 100);
+            m.setDataMovimento(rs.getString("DataMovimento"));
+            m.setIdContaPagar(rs.getInt("ContaPagarId"));
+            m.setIdVenda(rs.getInt("VendaId"));
+            m.setIdEntrada(rs.getInt("EntradaId"));
+            m.setIdContaPagar(rs.getInt("ContaId"));
+            m.setCaixa(rs.getString("caixa"));
+            m.setTipoDePagamento(rs.getString("TipoDePagamento"));
+            lista.add(m);
+        }
+        return lista;
+    }
+
     public double getValorSaidaPorDescricao(String descricao) throws Exception {
         double valor = 0;
         conectar();

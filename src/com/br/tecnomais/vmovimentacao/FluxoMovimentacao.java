@@ -2,7 +2,9 @@ package com.br.tecnomais.vmovimentacao;
 
 import com.br.tecnomais.classes.Alertas;
 import com.br.tecnomais.classes.NovaData;
+import com.br.tecnomais.dao.CaixaDAO;
 import com.br.tecnomais.dao.MovimentacaoDAO;
+import com.br.tecnomais.entity.CaixaEntity;
 import com.br.tecnomais.entity.MovimentacaoEntity;
 import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +17,8 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
 
     MovimentacaoDAO dao = new MovimentacaoDAO();
     NovaData n = new NovaData();
+    Double vlrTotalEntrada = 0.00;
+    Double vlrTotalSaida = 0.00;
 
     /**
      * Creates new form FluxoMovimentacao
@@ -26,6 +30,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
         setValorEntrada();
         setValorSaida();
         n.dataAtual(tfDataFinal);
+        preencherCBCaixa();
     }
 
     @SuppressWarnings("unchecked")
@@ -51,6 +56,12 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         tfDescricao = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        cbCaixa = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
+        cbTipoMov = new javax.swing.JComboBox();
+        cbFormaPag = new javax.swing.JComboBox();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -152,6 +163,23 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
             }
         });
 
+        cbCaixa.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "..." }));
+        cbCaixa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCaixaActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Caixa:");
+
+        cbTipoMov.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "...", "ENTRADA", "SAIDA" }));
+
+        cbFormaPag.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "...", "DINHEIRO", "PARCELADO", "CARTAO CREDITO", "CARTAO DEBITO" }));
+
+        jLabel10.setText("Tipo Movimentação:");
+
+        jLabel11.setText("Forma de Pagamento:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -168,17 +196,14 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbEntradas, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                        .addComponent(lbEntradas, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                         .addGap(62, 62, 62)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 888, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jButton1)
@@ -190,34 +215,66 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(tfDataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(tfDataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(31, 31, 31)
+                                .addGap(23, 23, 23)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel11)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cbFormaPag, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel10)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cbTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(tfDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tfDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jButton2))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tfDataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel8)))
-                .addGap(4, 4, 4)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(tfDataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(tfDataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel9)))
+                        .addGap(2, 2, 2)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(tfDataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(tfDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addGap(1, 1, 1)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbFormaPag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11)
+                            .addComponent(jButton2))
+                        .addGap(2, 2, 2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
@@ -295,10 +352,11 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        preencherTabelaPorDescricao();
-        setValorSaidaPorDescricao();
-        setValorEntradaPorDescricao();
-        setValorTotalPorDescricao();
+//        preencherTabelaPorDescricao();
+        preencherTabelaPorFiltros();
+//        setValorSaidaPorDescricao();
+//        setValorEntradaPorDescricao();
+//        setValorTotalPorDescricao();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -308,6 +366,13 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         new LancaEntradaView().setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void cbCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCaixaActionPerformed
+        preencherTabelaPorFiltros();
+        setValorSaidaPorDescricao();
+        setValorEntradaPorDescricao();
+        setValorTotalPorDescricao();
+    }//GEN-LAST:event_cbCaixaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -345,9 +410,14 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cbCaixa;
+    private javax.swing.JComboBox cbFormaPag;
+    private javax.swing.JComboBox cbTipoMov;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -355,6 +425,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -471,7 +542,65 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
+    private void preencherTabelaPorFiltros() {
+        try {
+            DefaultTableModel tb = (DefaultTableModel) jTable1.getModel();
+            tb.setNumRows(0);
+            String descricao = "";
+            String caixa = "";
+            String tipoPag = "";
+            String tipoMov = "";
+            String dataInicial = "01/01/1950";
+            String dataFinal = "25/12/2090";
+
+            if (!cbCaixa.getSelectedItem().toString().equals("...")) {
+                caixa = cbCaixa.getSelectedItem().toString();
+            }
+
+            if (!cbTipoMov.getSelectedItem().toString().equals("...")) {
+                tipoMov = cbTipoMov.getSelectedItem().toString();
+            }
+
+            if (!cbFormaPag.getSelectedItem().toString().equals("...")) {
+                tipoPag = cbFormaPag.getSelectedItem().toString();
+            }
+
+            if (!tfDescricao.getText().equals("")) {
+                descricao = tfDescricao.getText();
+            }
+
+            if (!tfDataInicial.getText().contains(" ")) {
+                dataInicial = tfDataInicial.getText();
+            }
+
+            if (!tfDataFinal.getText().contains(" ")) {
+                dataFinal = tfDataFinal.getText();
+            }
+
+            vlrTotalEntrada = 0.00;
+            vlrTotalSaida = 0.00;
+            for (MovimentacaoEntity mov : dao.consultarPorFiltro("%" + descricao + "%",
+                    "%" + caixa + "%", "%" + tipoPag + "%", "%" + tipoMov + "%",
+                    dataInicial, dataFinal)) {
+//                if (mov.getTipoMovimento().equals("Entrada")) {
+                tb.addRow(new Object[]{mov.getIdMovimento(), mov.getDescricao(), mov.getTipoMovimento(), "R$ " + new DecimalFormat("0.00").format(mov.getValor()), mov.getDataMovimento()});
+//                }
+                if (mov.getTipoMovimento().equals("ENTRADA")) {
+                    vlrTotalEntrada = vlrTotalEntrada + mov.getValor();
+                }
+                if (mov.getTipoMovimento().equals("SAIDA")) {
+                    vlrTotalSaida = vlrTotalSaida + mov.getValor();
+                }
+            }
+            lbEntradas.setText(new DecimalFormat("0.00").format(vlrTotalEntrada));
+            lbSaida.setText(new DecimalFormat("0.00").format(vlrTotalSaida));
+            lbTotal.setText(new DecimalFormat("0.00").format(vlrTotalEntrada- (-vlrTotalSaida)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setValorSaidaPorDescricao() {
         try {
             String descricao = tfDescricao.getText() + "%";
@@ -480,7 +609,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     private void setValorEntradaPorDescricao() {
         try {
             String descricao = tfDescricao.getText() + "%";
@@ -489,11 +618,24 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     private void setValorTotalPorDescricao() {
         try {
             String descricao = tfDescricao.getText() + "%";
             lbTotal.setText("R$ " + new DecimalFormat("0.00").format(dao.getValorEntradaPorDescricao(descricao) + dao.getValorSaidaPorDescricao(descricao)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void preencherCBCaixa() {
+        CaixaDAO caiDAO = new CaixaDAO();
+        try {
+            CaixaEntity cls = new CaixaEntity();
+//            cbCaixa.addItem("...");
+            for (String str : caiDAO.todosCaixaNome()) {
+                cbCaixa.addItem(str);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
