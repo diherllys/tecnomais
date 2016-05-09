@@ -333,7 +333,7 @@ public class SelecionaClienteVendaView extends javax.swing.JDialog {
         codigoCliente = Integer.parseInt(tbClientes.getValueAt(linha, 0).toString());
         fvv.finalizaVendaParcelado();
         fvv.cadastrarContaReceber();
-        fvv.fluxoNovinhaNoGrau();
+//        fvv.fluxoNovinhaNoGrau();
         fvv.baixaNoEstoque();
         if (impressoraAtual.equals("ImpressoraBematech")) {
             imprimirCabecalhoBematech();
@@ -385,7 +385,7 @@ public class SelecionaClienteVendaView extends javax.swing.JDialog {
             ce.setEndereco(tbClientes.getValueAt(linha, 3).toString());
             fvv.finalizaVendaParcelado();
             fvv.cadastrarContaReceber();
-            fvv.fluxoNovinhaNoGrau();
+//            fvv.fluxoNovinhaNoGrau();
             fvv.baixaNoEstoque();
             if (impressoraAtual.equals("ImpressoraBematech")) {
                 imprimirCabecalhoBematech();

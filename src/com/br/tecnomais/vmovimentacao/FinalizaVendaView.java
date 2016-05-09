@@ -9,15 +9,10 @@ import java.awt.AWTKeyStroke;
 import java.awt.Color;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JTextField;
 
 /**
@@ -580,7 +575,7 @@ public class FinalizaVendaView extends javax.swing.JFrame implements FinalizarVe
         btEfetivar.requestFocus();
 
         finalizarVendaOp();
-        
+
 //        if (tfVlrPago.isEnabled() && !tfVlrPago.getText().isEmpty()) {
 //            valorPag1();
 //            if (tfFormaPagamento.getText().equals("PARCELADO") || tfFormaPagamento.getText().equals("CARTAO CREDITO")) {
@@ -1742,7 +1737,7 @@ public class FinalizaVendaView extends javax.swing.JFrame implements FinalizarVe
     }
 
     @Override
-    public void fluxoNovinhaNoGrau() {
+    public void fluxoNovinhaNoGrau(Double valorTotal, String tipoPagamento) {
         try {
             VendaDAO daoVenda = new VendaDAO();
             int codigoVenda = daoVenda.getLastCodigoVenda();
@@ -1754,31 +1749,72 @@ public class FinalizaVendaView extends javax.swing.JFrame implements FinalizarVe
             mov.setIdEntrada(0);
             mov.setDescricao("VENDA FINALIZADA");
             mov.setTipoMovimento("ENTRADA");
-            Double vlrRecebido = 0.0;
-            Double troco = Double.parseDouble(lbTroco.getText().replace(",", ".").replace(".", ""));
+            mov.setTipoDePagamento(tipoPagamento);
+            
+//            Double vlrRecebido = 0.0;
+//            Double troco = Double.parseDouble(lbTroco.getText().replace(",", ".").replace(".", ""));
 
-            if (tfFormaPagamento.equals("DINHEIRO") && troco >= 0) {
-                mov.setValor(Double.valueOf(tfVlrTotal.getText().replace(",", ".").replace(".", "")));
-            } else {
-                mov.setValor(Double.valueOf(tfVlrPago.getText().replace(",", ".").replace(".", "")));
-            }
-            if ((tfCodigoFormaPagamento2.isEnabled()) && tfFormaPagamento2.getText().equals("CARTAO CREDITO") || tfFormaPagamento2.getText().equals("CARTAO DEBITO")) {
-                vlrRecebido = Double.valueOf(tfVlrPago.getText().replace(",", ".").replace(".", "")) + Double.valueOf(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
-                mov.setValor(vlrRecebido);
-            }
-            if ((tfCodigoFormaPagamento3.isEnabled()) && tfFormaPagamento3.getText().equals("CARTAO CREDITO") || tfFormaPagamento3.getText().equals("CARTAO DEBITO")) {
-                vlrRecebido = mov.getValor() + Double.valueOf(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
-                mov.setValor(vlrRecebido);
-            }
+//            if (tfFormaPagamento.equals("DINHEIRO") && troco >= 0) {
+//                mov.setValor(Double.valueOf(tfVlrTotal.getText().replace(",", ".").replace(".", "")));
+//            } else {
+//                mov.setValor(Double.valueOf(tfVlrPago.getText().replace(",", ".").replace(".", "")));
+//            }
+//            if ((tfCodigoFormaPagamento2.isEnabled()) && tfFormaPagamento2.getText().equals("CARTAO CREDITO") || tfFormaPagamento2.getText().equals("CARTAO DEBITO")) {
+//                vlrRecebido = Double.valueOf(tfVlrPago.getText().replace(",", ".").replace(".", "")) + Double.valueOf(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
+//                mov.setValor(vlrRecebido);
+//            }
+//            if ((tfCodigoFormaPagamento3.isEnabled()) && tfFormaPagamento3.getText().equals("CARTAO CREDITO") || tfFormaPagamento3.getText().equals("CARTAO DEBITO")) {
+//                vlrRecebido = mov.getValor() + Double.valueOf(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
+//                mov.setValor(vlrRecebido);
+//            }
             mov.setCaixa(venda.getCaixa());
             mov.setDataMovimento(lbDataAtual.getText());
+            mov.setValor(valorTotal);
             MovimentacaoDAO dao = new MovimentacaoDAO();
-            dao.inserirValorMovimentacao(mov);
+            dao.gravarEntrada(mov);
         } catch (Exception e) {
             new Alertas().mensagemErro("" + e);
             e.printStackTrace();
         }
     }
+//    @Override
+//    public void fluxoNovinhaNoGrau() {
+//        try {
+//            VendaDAO daoVenda = new VendaDAO();
+//            int codigoVenda = daoVenda.getLastCodigoVenda();
+//            System.out.println("Codigo: " + codigoVenda);
+//            MovimentacaoEntity mov = new MovimentacaoEntity();
+//            mov.setIdVenda(codigoVenda);
+//            mov.setIdConta(0);
+//            mov.setIdContaPagar(0);
+//            mov.setIdEntrada(0);
+//            mov.setDescricao("VENDA FINALIZADA");
+//            mov.setTipoMovimento("ENTRADA");
+//            Double vlrRecebido = 0.0;
+//            Double troco = Double.parseDouble(lbTroco.getText().replace(",", ".").replace(".", ""));
+//
+//            if (tfFormaPagamento.equals("DINHEIRO") && troco >= 0) {
+//                mov.setValor(Double.valueOf(tfVlrTotal.getText().replace(",", ".").replace(".", "")));
+//            } else {
+//                mov.setValor(Double.valueOf(tfVlrPago.getText().replace(",", ".").replace(".", "")));
+//            }
+//            if ((tfCodigoFormaPagamento2.isEnabled()) && tfFormaPagamento2.getText().equals("CARTAO CREDITO") || tfFormaPagamento2.getText().equals("CARTAO DEBITO")) {
+//                vlrRecebido = Double.valueOf(tfVlrPago.getText().replace(",", ".").replace(".", "")) + Double.valueOf(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
+//                mov.setValor(vlrRecebido);
+//            }
+//            if ((tfCodigoFormaPagamento3.isEnabled()) && tfFormaPagamento3.getText().equals("CARTAO CREDITO") || tfFormaPagamento3.getText().equals("CARTAO DEBITO")) {
+//                vlrRecebido = mov.getValor() + Double.valueOf(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
+//                mov.setValor(vlrRecebido);
+//            }
+//            mov.setCaixa(venda.getCaixa());
+//            mov.setDataMovimento(lbDataAtual.getText());
+//            MovimentacaoDAO dao = new MovimentacaoDAO();
+//            dao.inserirValorMovimentacao(mov);
+//        } catch (Exception e) {
+//            new Alertas().mensagemErro("" + e);
+//            e.printStackTrace();
+//        }
+//    }
 
     private void imprimirCupomBematech(int i) {
         String tipoDeVenda = "";
@@ -1990,15 +2026,73 @@ public class FinalizaVendaView extends javax.swing.JFrame implements FinalizarVe
                             selCliente.setVisible(true);
                             clienteID = selCliente.getCodigoCliente();
                             System.out.println("ID " + clienteID);
+
                             if (clienteID > 1) {
                                 ce.setId(clienteID);
-                                this.dispose();
+
+                                if (tfFormaPagamento.getText().equals("DINHEIRO")) {
+                                    Double vlrAVista = 0.00;
+                                    vlrAVista = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
+                                    fluxoNovinhaNoGrau(vlrAVista, "DINHEIRO");
+                                }
+
+                                if (tfFormaPagamento.getText().equals("PARCELADO")) {
+                                    Double vlrAVista = 0.00;
+                                    vlrAVista = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
+                                    fluxoNovinhaNoGrau(vlrAVista, "DINHEIRO");
+                                }
+
+                                if (tfFormaPagamento2.getText().equals("CARTAO CREDITO")
+                                        || tfFormaPagamento2.getText().equals("CARTAO DEBITO")) {
+                                    Double vlrAVista = 0.00;
+                                    vlrAVista = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
+                                    fluxoNovinhaNoGrau(vlrAVista, tfFormaPagamento2.getText());
+                                }
+
+                                if (tfFormaPagamento3.getText().equals("CARTAO CREDITO")
+                                        || tfFormaPagamento3.getText().equals("CARTAO DEBITO")) {
+                                    Double vlrAVista = 0.00;
+                                    vlrAVista = Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
+                                    fluxoNovinhaNoGrau(vlrAVista, tfFormaPagamento3.getText());
+                                }
+
                                 vendasView.apagarLista();
+                                this.dispose();
                             }
                         } else {
                             finalizaVendaParcelado();
                             cadastrarContaReceber();
-                            fluxoNovinhaNoGrau();
+
+                            if (tfFormaPagamento.getText().equals("DINHEIRO")) {
+                                Double vlrAVista = 0.00;
+                                vlrAVista = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
+                                fluxoNovinhaNoGrau(vlrAVista, "DINHEIRO");
+                            }
+
+                            if (tfFormaPagamento.getText().equals("PARCELADO")) {
+                                Double vlrAVista = 0.00;
+                                vlrAVista = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
+                                fluxoNovinhaNoGrau(vlrAVista, "DINHEIRO");
+                            }
+                            if (tfFormaPagamento2.getText().equals("CARTAO CREDITO")
+                                    || tfFormaPagamento2.getText().equals("CARTAO DEBITO")) {
+                                Double vlrAVista = 0.00;
+                                vlrAVista = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
+                                fluxoNovinhaNoGrau(vlrAVista, tfFormaPagamento2.getText());
+                            }
+
+                            if (tfFormaPagamento3.getText().equals("CARTAO CREDITO")
+                                    || tfFormaPagamento3.getText().equals("CARTAO DEBITO")) {
+                                Double vlrAVista = 0.00;
+                                vlrAVista = Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
+                                fluxoNovinhaNoGrau(vlrAVista, tfFormaPagamento3.getText());
+                            }
+//                            else if (tfFormaPagamento2.getText().equals("PARCELADO")) {
+//                                vlrAVista = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
+//                            } else if (tfFormaPagamento3.getText().equals("PARCELADO")) {
+//                                vlrAVista = Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
+//                            }
+
                             baixaNoEstoque();
                             if (impressoraAtual.equals("ImpressoraBematech")) {
                                 imprimirCabecalhoBematech();
@@ -2025,7 +2119,23 @@ public class FinalizaVendaView extends javax.swing.JFrame implements FinalizarVe
                     }
                 } else {
                     finalizaVendaAVista();
-                    fluxoNovinhaNoGrau();
+                    Double vlrForm1 = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
+                    fluxoNovinhaNoGrau(vlrForm1, tfFormaPagamento.getText());
+
+                    if (tfFormaPagamento2.getText().equals("CARTAO CREDITO")
+                            || tfFormaPagamento2.getText().equals("CARTAO DEBITO")) {
+                        Double vlrAVista = 0.00;
+                        vlrAVista = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
+                        fluxoNovinhaNoGrau(vlrAVista, tfFormaPagamento2.getText());
+                    }
+
+                    if (tfFormaPagamento3.getText().equals("CARTAO CREDITO")
+                            || tfFormaPagamento3.getText().equals("CARTAO DEBITO")) {
+                        Double vlrAVista = 0.00;
+                        vlrAVista = Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
+                        fluxoNovinhaNoGrau(vlrAVista, tfFormaPagamento3.getText());
+                    }
+
                     baixaNoEstoque();
                     if (impressoraAtual.equals("ImpressoraBematech")) {
                         imprimirCabecalhoBematech();
@@ -2067,13 +2177,24 @@ public class FinalizaVendaView extends javax.swing.JFrame implements FinalizarVe
                         System.out.println("ID " + clienteID);
                         if (clienteID > 1) {
                             ce.setId(clienteID);
+
+                            Double vlrAVista = 0.00;
+                            if (tfFormaPagamento.getText().equals("PARCELADO")) {
+                                vlrAVista = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
+                                fluxoNovinhaNoGrau(vlrAVista, "DINHEIRO");
+                            }
                             vendasView.apagarLista();
                             this.dispose();
                         }
                     } else {
                         finalizaVendaParcelado();
                         cadastrarContaReceber();
-                        fluxoNovinhaNoGrau();
+
+                        Double vlrAVista = 0.00;
+                        if (tfFormaPagamento.getText().equals("PARCELADO")) {
+                            vlrAVista = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
+                            fluxoNovinhaNoGrau(vlrAVista, "DINHEIRO");
+                        }
                         baixaNoEstoque();
                         if (impressoraAtual.equals("ImpressoraBematech")) {
                             imprimirCabecalhoBematech();
@@ -2107,7 +2228,8 @@ public class FinalizaVendaView extends javax.swing.JFrame implements FinalizarVe
             } else {
                 finalizaVenda();
                 baixaNoEstoque();
-                fluxoNovinhaNoGrau();
+                Double vlrFlx = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
+                fluxoNovinhaNoGrau(vlrFlx, tfFormaPagamento.getText());
                 if (impressoraAtual.equals("ImpressoraBematech")) {
                     imprimirCabecalhoBematech();
                 } else if (impressoraAtual.equals("ImpressoraDaruma")) {
@@ -2122,8 +2244,12 @@ public class FinalizaVendaView extends javax.swing.JFrame implements FinalizarVe
                 alerta.mensagemAviso("Valor pago é menor do que o valor total a ser pago!!!");
             } else {
                 finalizaVenda();
+
                 baixaNoEstoque();
-                fluxoNovinhaNoGrau();
+
+                Double vlrFlx = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
+                fluxoNovinhaNoGrau(vlrFlx, tfFormaPagamento.getText());
+
                 if (impressoraAtual.equals("ImpressoraBematech")) {
                     imprimirCabecalhoBematech();
                 } else if (impressoraAtual.equals("ImpressoraDaruma")) {

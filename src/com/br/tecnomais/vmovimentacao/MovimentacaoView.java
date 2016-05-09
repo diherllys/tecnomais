@@ -133,6 +133,8 @@ public class MovimentacaoView extends javax.swing.JFrame {
 
         lbAlgo3.setBackground(new java.awt.Color(204, 204, 204));
         lbAlgo3.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        lbAlgo3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/br/tecnomais/images/contas pagas 5 80x80.png"))); // NOI18N
+        lbAlgo3.setText("<html>Contas<p>Pagas");
         lbAlgo3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         lbAlgo3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbAlgo3.setOpaque(true);

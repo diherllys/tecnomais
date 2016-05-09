@@ -37,7 +37,7 @@ public interface FinalizarVendaListener {
 
     void cadastrarContaReceber();
 
-    void fluxoNovinhaNoGrau();
+    void fluxoNovinhaNoGrau(Double valorTotal, String tipoPagamento);
 
     void baixaNoEstoque();
 }
