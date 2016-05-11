@@ -38,7 +38,7 @@ public class NovaVendaView extends javax.swing.JDialog {
         this.vv = vv;
         ve.setId(0);
         this.setModal(true);
-        
+
         lbPesquisaCaixa.setVisible(false);
         lbPesquisaCliente.setVisible(false);
         lbPesquisaVendedor.setVisible(false);
@@ -444,9 +444,13 @@ public class NovaVendaView extends javax.swing.JDialog {
 
     private void pesquisarUsuario() {
         try {
-            String result = dao.selecionaUsuario(Integer.parseInt(tfVendedor.getText()));
-            tfVendedorNome.setText(result);
-            tfCliente.requestFocus();
+            if (tfVendedor.getText().isEmpty()) {
+                
+            } else {
+                String result = dao.selecionaUsuario(Integer.parseInt(tfVendedor.getText()));
+                tfVendedorNome.setText(result);
+                tfCliente.requestFocus();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

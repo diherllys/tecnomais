@@ -65,6 +65,7 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
     Integer idComputador = 0;
 
     Integer idAtualprod = 0;
+    String trueTfProduto = "";
 
     // AlteraOperacaoSaidaView alteraSV = new AlteraOperacaoSaidaView(this);
     public VendasView(String operacao, String usuario, String caixa, ClienteEntity clienteEntity, List<ProdutosVendaEntity> lista, VendaEntity ve) {
@@ -599,7 +600,7 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
             }
             if (tfProduto.getText().isEmpty()) {
 
-            } else if (!Character.isDigit(d)) {
+            } else if (!Character.isDigit(d) && (tfProduto.getText().endsWith("*"))) {
                 pesquisarProduto();
             } else {
                 try {
@@ -610,6 +611,9 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
                     e.printStackTrace();
                 }
             }
+//            else if (Character.isDigit(d)) {
+//                pesquisarProduto();
+//            } 
         }
         tfQuantidade.selectAll();
     }//GEN-LAST:event_tfProdutoActionPerformed
@@ -628,7 +632,7 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
                     if (ctve.getPermitirEstqNegativo() == 1 || (pro.getQntAtual() > qntDigitada || pro.getQntAtual() == 1)) {
                         if (lbCupom.getText().equals("") || !lbOperacao.getText().equals("VENDA ESTADUAL")) {
                             calcPreco();
-                            addListaProdutos();
+                            addListaProdutos(qntDigitada);
                             mostrarProdutosListados();
                             valorDescontoItem = 0;
                         } else {
@@ -659,11 +663,18 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
             leitor = false;
             try {
                 double qntDigitada = Double.parseDouble("1");
+                if (trueTfProduto.contains("*")) {
+                    System.out.println("entroius");
+                    String aux = trueTfProduto.substring(0, trueTfProduto.indexOf("*"));
+                    System.out.println("aux " + aux);
+                    qntDigitada = Double.parseDouble(aux);
+                    tfQuantidade.setText(aux);
+                }
                 for (ProdutoEntity pro : prodDao.pesquisarProdutoFromCodigoBarrasOrId(codigo)) {
                     if (ctve.getPermitirEstqNegativo() == 1 || (pro.getQntAtual() > qntDigitada || pro.getQntAtual() == 1)) {
                         if (lbCupom.getText().equals("") || !lbOperacao.getText().equals("VENDA ESTADUAL")) {
                             calcPreco();
-                            addListaProdutos();
+                            addListaProdutos(qntDigitada);
                             mostrarProdutosListados();
                             valorDescontoItem = 0;
                         } else {
@@ -859,11 +870,12 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
         tfPrecoTotal.setText(new DecimalFormat("0.00").format(precoTotal));
     }
 
-    private void addListaProdutos() {//volta aqui
+    private void addListaProdutos(Double qnt) {//volta aqui
         ProdutosVendaEntity pro = new ProdutosVendaEntity();
         pro.setId(idAtualprod);
         pro.setCodigoProduto(Integer.parseInt(tfProduto.getText()));
-        pro.setQuantidade(Double.parseDouble(tfQuantidade.getText().replace(",", ".")));
+//                pro.setQuantidade(Double.parseDouble(tfQuantidade.getText().replace(",", ".")));
+        pro.setQuantidade(qnt);
         pro.setProdutoServico(lbNomeProduto.getText());
         pro.setPrecoUnitario(Double.parseDouble(tfPrecoUnitario.getText().replace(",", ".").replace(".", "")));
         pro.setPrecoTotal(Double.parseDouble(tfPrecoTotal.getText().replace(",", ".").replace(".", "")) - valorDescontoItem);
@@ -1155,7 +1167,15 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
 
     private void lancaProduto() {
         try {
-            codigo = tfProduto.getText();
+            String aux32 = tfProduto.getText();
+            trueTfProduto = tfProduto.getText();
+            if (tfProduto.getText().contains("*")) {
+                aux32 = tfProduto.getText().substring(tfProduto.getText().indexOf("*") + 1, tfProduto.getText().length());
+            }
+
+            codigo = aux32.replace("*", "");
+            System.out.println("aux 32 " + codigo);
+//            codigo = tfProduto.getText();
             for (ProdutoEntity p : prodDao.pesquisarProdutoFromCodigoBarrasOrId(codigo)) {
                 System.out.print(prodDao.pesquisarProdutoFromCodigoBarrasOrId(codigo).size());
 
@@ -1163,18 +1183,21 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
                     new Alertas().mensagemAviso("Produto inexistente!");
                 } else {
                     tfPrecoUnitario.setText(new DecimalFormat("0.00").format(p.getPrecoDeVenda()));
+
+                    trueTfProduto = tfProduto.getText();
+
                     tfProduto.setText(p.getCodigoProduto().toString());
                     lbNomeProduto.setText(p.getNome() + " - " + p.getUnidadeDeVenda());
                     unidadeVenda = p.getUnidadeDeVenda();
                     idAtualprod = p.getId();
+                    tfQuantidade.setText("1");
                     if (codigo.length() > 10) {
                         leitor = true;
                     }
                     tfQuantidade.requestFocusInWindow();
-                    tfQuantidade.setText("1");
                 }
-
             }
+            System.out.println("true tf " + trueTfProduto);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -85,6 +85,9 @@ public class TelaInicialView2 extends javax.swing.JFrame implements Runnable {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Tecnomais");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
@@ -92,8 +95,24 @@ public class TelaInicialView2 extends javax.swing.JFrame implements Runnable {
                 formWindowClosing(evt);
             }
         });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         lbLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbLogo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                lbLogoKeyPressed(evt);
+            }
+        });
+
+        jMenuBar1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jMenuBar1KeyPressed(evt);
+            }
+        });
 
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/br/tecnomais/images/newCad.png"))); // NOI18N
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -242,6 +261,22 @@ public class TelaInicialView2 extends javax.swing.JFrame implements Runnable {
         new SuportView().setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jMenu6MousePressed
 
+    private void lbLogoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lbLogoKeyPressed
+       
+    }//GEN-LAST:event_lbLogoKeyPressed
+
+    private void jMenuBar1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jMenuBar1KeyPressed
+      
+    }//GEN-LAST:event_jMenuBar1KeyPressed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+     
+    }//GEN-LAST:event_formWindowActivated
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+     atalhos(evt);
+    }//GEN-LAST:event_formKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -354,5 +389,11 @@ public class TelaInicialView2 extends javax.swing.JFrame implements Runnable {
     @Override
     public void run() {
         this.setVisible(true);
+    }
+
+    private void atalhos(KeyEvent evt) {
+        if (evt.getKeyCode() == KeyEvent.VK_F6) {
+            new Alertas().mensagemConfirmacao("Desenvolvido por Diherllys Lima Leal e Powered by Reginaldo Candido, diherllys@gmail.com (88) 9-99840013");
+        }
     }
 }
