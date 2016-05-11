@@ -1,4 +1,5 @@
 package com.br.tecnomais.vmovimentacao;
+
 import com.br.tecnomais.classes.Alertas;
 import com.br.tecnomais.classes.NovaData;
 import com.br.tecnomais.entity.PermissoesEntity;
@@ -39,7 +40,7 @@ public class MovimentacaoView extends javax.swing.JFrame {
         lbSaida = new javax.swing.JLabel();
         lbEntrada = new javax.swing.JLabel();
         lbAlgo2 = new javax.swing.JLabel();
-        lbAlgo3 = new javax.swing.JLabel();
+        lbContaPgas = new javax.swing.JLabel();
         lbAlgo4 = new javax.swing.JLabel();
         lbAlgo5 = new javax.swing.JLabel();
         lbFluxoCaixa = new javax.swing.JLabel();
@@ -131,22 +132,22 @@ public class MovimentacaoView extends javax.swing.JFrame {
             }
         });
 
-        lbAlgo3.setBackground(new java.awt.Color(204, 204, 204));
-        lbAlgo3.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        lbAlgo3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/br/tecnomais/images/contas pagas 5 80x80.png"))); // NOI18N
-        lbAlgo3.setText("<html>Contas<p>Pagas");
-        lbAlgo3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        lbAlgo3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lbAlgo3.setOpaque(true);
-        lbAlgo3.addMouseListener(new java.awt.event.MouseAdapter() {
+        lbContaPgas.setBackground(new java.awt.Color(204, 204, 204));
+        lbContaPgas.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        lbContaPgas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/br/tecnomais/images/contas pagas 5 80x80.png"))); // NOI18N
+        lbContaPgas.setText("<html>Contas<p>Pagas");
+        lbContaPgas.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        lbContaPgas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lbContaPgas.setOpaque(true);
+        lbContaPgas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lbAlgo3MouseEntered(evt);
+                lbContaPgasMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                lbAlgo3MouseExited(evt);
+                lbContaPgasMouseExited(evt);
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                lbAlgo3MousePressed(evt);
+                lbContaPgasMousePressed(evt);
             }
         });
 
@@ -297,7 +298,7 @@ public class MovimentacaoView extends javax.swing.JFrame {
                             .addComponent(lbFluxoCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbContasReceber, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lbAlgo3, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbContaPgas, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbAlgo2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -311,7 +312,7 @@ public class MovimentacaoView extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lbAlgo2, lbAlgo3, lbAlgo4, lbAlgo5, lbAlgo8, lbConsultarSaida, lbContasReceber, lbEntrada, lbFluxoCaixa, lbRelatorios, lbSaida});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lbAlgo2, lbAlgo4, lbAlgo5, lbAlgo8, lbConsultarSaida, lbContaPgas, lbContasReceber, lbEntrada, lbFluxoCaixa, lbRelatorios, lbSaida});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -329,7 +330,7 @@ public class MovimentacaoView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbAlgo2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbAlgo3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbContaPgas, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbAlgo4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,7 +342,7 @@ public class MovimentacaoView extends javax.swing.JFrame {
                         .addContainerGap())))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lbAlgo2, lbAlgo3, lbAlgo4, lbAlgo5, lbAlgo8, lbConsultarSaida, lbContasReceber, lbEntrada, lbFluxoCaixa, lbRelatorios, lbSaida});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lbAlgo2, lbAlgo4, lbAlgo5, lbAlgo8, lbConsultarSaida, lbContaPgas, lbContasReceber, lbEntrada, lbFluxoCaixa, lbRelatorios, lbSaida});
 
         javax.swing.GroupLayout jpPainelLayout = new javax.swing.GroupLayout(jpPainel);
         jpPainel.setLayout(jpPainelLayout);
@@ -426,18 +427,6 @@ public class MovimentacaoView extends javax.swing.JFrame {
     private void lbAlgo2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbAlgo2MousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_lbAlgo2MousePressed
-
-    private void lbAlgo3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbAlgo3MouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lbAlgo3MouseEntered
-
-    private void lbAlgo3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbAlgo3MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lbAlgo3MouseExited
-
-    private void lbAlgo3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbAlgo3MousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lbAlgo3MousePressed
 
     private void lbAlgo4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbAlgo4MouseEntered
         // TODO add your handling code here:
@@ -547,6 +536,18 @@ public class MovimentacaoView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_lbRelatoriosMousePressed
 
+    private void lbContaPgasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbContaPgasMousePressed
+        new ContasPagasView().setVisible(true);
+    }//GEN-LAST:event_lbContaPgasMousePressed
+
+    private void lbContaPgasMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbContaPgasMouseExited
+        lbContaPgas.setForeground(Color.black);
+    }//GEN-LAST:event_lbContaPgasMouseExited
+
+    private void lbContaPgasMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbContaPgasMouseEntered
+        lbContaPgas.setForeground(Color.red);
+    }//GEN-LAST:event_lbContaPgasMouseEntered
+
     /**
      * @param args the command line arguments
      */
@@ -587,11 +588,11 @@ public class MovimentacaoView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jpPainel;
     private javax.swing.JLabel lbAlgo2;
-    private javax.swing.JLabel lbAlgo3;
     private javax.swing.JLabel lbAlgo4;
     private javax.swing.JLabel lbAlgo5;
     private javax.swing.JLabel lbAlgo8;
     private javax.swing.JLabel lbConsultarSaida;
+    private javax.swing.JLabel lbContaPgas;
     private javax.swing.JLabel lbContasPagar;
     private javax.swing.JLabel lbContasReceber;
     private javax.swing.JLabel lbEntrada;

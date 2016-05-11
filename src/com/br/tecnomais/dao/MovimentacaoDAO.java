@@ -158,7 +158,10 @@ public class MovimentacaoDAO extends ConectaBanco {
     public List<MovimentacaoEntity> consultarPorFiltro(String descricao, String caixa, String tipoPag, String tipoMov, String dataInicial, String dataFinal) throws Exception {
         List<MovimentacaoEntity> lista = new ArrayList<>();
         conectar();
-        String sql = "SELECT * FROM tb_movimentacao WHERE Valor != 0.0 AND Descricao like ? AND Caixa like ? AND TipoDePagamento like ? AND TipoMovimento like ? AND convert(datetime, DataMovimento, 103) BETWEEN convert(datetime, ?, 103) AND convert(datetime, ?, 103) ORDER BY IdMovimento desc";
+        String sql = "SELECT * FROM tb_movimentacao WHERE Valor != 0.0 AND Descricao like ? "
+                + "AND Caixa like ? AND TipoDePagamento like ? AND TipoMovimento like ? "
+                + "AND convert(datetime, DataMovimento, 103) BETWEEN convert(datetime, ?, 103) "
+                + "AND convert(datetime, ?, 103) ORDER BY IdMovimento desc";
         stmt = conn.prepareStatement(sql);
         stmt.setString(1, descricao);
         stmt.setString(2, caixa);

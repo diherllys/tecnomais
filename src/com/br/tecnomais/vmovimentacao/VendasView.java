@@ -423,6 +423,7 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
         tfValorTotal.setText("0,00");
         tfValorTotal.setBorder(null);
 
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/br/tecnomais/images/Logo.png"))); // NOI18N
         jLabel9.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N

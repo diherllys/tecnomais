@@ -205,6 +205,9 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
             public void focusGained(java.awt.event.FocusEvent evt) {
                 tfQuantidadeFocusGained(evt);
             }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfQuantidadeFocusLost(evt);
+            }
         });
         tfQuantidade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -979,9 +982,7 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
     }//GEN-LAST:event_tfDescricaoProdutoActionPerformed
 
     private void tfQuantidadeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfQuantidadeKeyReleased
-        if (unidadeVenda.equals("UN")) {
-            new ValidarCamposNumericos().validar(tfQuantidade);
-        }
+
     }//GEN-LAST:event_tfQuantidadeKeyReleased
 
     private void lbGravarBMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbGravarBMousePressed
@@ -1154,6 +1155,12 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
     private void jTTabelaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTTabelaKeyPressed
         atalhos(evt);
     }//GEN-LAST:event_jTTabelaKeyPressed
+
+    private void tfQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfQuantidadeFocusLost
+        if (unidadeVenda.equals("UN")) {
+            new ValidarCamposNumericos().validar(tfQuantidade);
+        }
+    }//GEN-LAST:event_tfQuantidadeFocusLost
 
     /**
      * @param args the command line arguments
