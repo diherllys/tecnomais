@@ -380,7 +380,7 @@ public class TelaInicialView2 extends javax.swing.JFrame implements Runnable {
         int height = (int) d.getHeight() - 105;
         System.out.println(tam);
 
-        image = new ImageIcon("Logomarca/logo-oficial 5.jpg");
+        image = new ImageIcon("Logomarca/tela.png");
 
         Image img = image.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         lbLogo.setIcon(new ImageIcon(img));

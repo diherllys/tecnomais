@@ -1732,9 +1732,9 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
             VendaEntity v = new VendaEntity();
             v.setCaixa(lbCaixa.getText());
             v.setVendedor(lbVendedor.getText());
-            v.setFormaPagamento("BRINDE");
-            v.setFormaPagamento2("BRINDE");
-            v.setFormaPagamento3("BRINDE");
+            v.setFormaPagamento("DINHEIRO");
+            v.setFormaPagamento2("");
+            v.setFormaPagamento3("");
             v.setOperacao(lbOperacao.getText());
             v.setVlrTotal(Double.parseDouble(tfValorTotal.getText().replace(",", ".").replace(".", "")));
             v.setStatus("F");
@@ -1749,6 +1749,22 @@ public class VendasView extends javax.swing.JFrame implements VendaListener {
             v.setHora(hora);
             daoVenda.efetivarVenda(v);
             baixaNoEstoque();
+            MovimentacaoDAO dao = new MovimentacaoDAO();
+            MovimentacaoEntity movE = new MovimentacaoEntity();
+
+            movE.setCaixa(v.getCaixa());
+            movE.setDataMovimento(v.getDataVenda());
+            movE.setDescricao("BRINDE");
+            movE.setIdConta(0);
+            movE.setIdContaPagar(0);
+            movE.setIdEntrada(0);
+            VendaDAO daoVenda = new VendaDAO();
+            int codigoVenda = daoVenda.getLastCodigoVenda();
+            movE.setIdVenda(codigoVenda);
+            movE.setTipoDePagamento("DINHEIRO");
+            movE.setTipoMovimento("SAIDA");
+            movE.setValor(Double.parseDouble(tfValorTotal.getText().replace(",", ".").replace(".", "")));
+            dao.gravarSaida(movE);
         } catch (Exception e) {
             e.printStackTrace();
         }

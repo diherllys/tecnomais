@@ -2,7 +2,6 @@ package com.br.tecnomais.vmovimentacao;
 
 import com.br.tecnomais.classes.Alertas;
 import com.br.tecnomais.dao.CaixaDAO;
-import com.br.tecnomais.dao.ClienteDAO;
 import com.br.tecnomais.dao.EntradaDAO;
 import com.br.tecnomais.dao.ProdutosVendaDAO;
 import com.br.tecnomais.dao.SaidasDAO;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.input.KeyCode;
 
 /**
  *

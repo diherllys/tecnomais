@@ -488,11 +488,16 @@ public class TrocaProdutos extends javax.swing.JFrame {
             MovimentacaoEntity mov = new MovimentacaoEntity();
             mov.setIdVenda(codigoVenda);
             mov.setIdConta(0);
+            mov.setIdEntrada(0);
+            mov.setIdContaPagar(0);
+            mov.setTipoDePagamento(rbCartaoCredito.getText().toString());
+            mov.setCaixa(venda.getCaixa());
+//            mov.set
             mov.setDescricao("TROCA DE PRODUTOS");
-            mov.setTipoMovimento("Entrada");
+            mov.setTipoMovimento("ENTRADA");
             mov.setValor(Double.valueOf(tfDiferenca.getText().replace(",", ".").replace(".", "")));
             mov.setDataMovimento(lbData.getText());
-            daoMovimentacao.inserirValorMovimentacao(mov);
+            daoMovimentacao.gravarEntrada(mov);
         } catch (Exception e) {
             e.printStackTrace();
             new Alertas().mensagemErro("" + e);

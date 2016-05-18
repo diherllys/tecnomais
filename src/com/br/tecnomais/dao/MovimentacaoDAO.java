@@ -263,4 +263,29 @@ public class MovimentacaoDAO extends ConectaBanco {
             e.printStackTrace();
         }
     }
+
+    public void excluirMovEntrada(Integer seq) {
+        try {
+            conectar();
+            String sql = "delete from tb_movimentacao where EntradaID=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+     public void deletar(Integer seq) {
+        try {
+            conectar();
+            String sql = "delete from tb_movimentacao where idMovimento=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

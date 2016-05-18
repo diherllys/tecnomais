@@ -82,6 +82,7 @@
                                   </Group>
                               </Group>
                               <Component id="chbCad" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="chbExcluirMov" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -101,6 +102,8 @@
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jScrollPane1" min="-2" pref="305" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
+                          <Component id="chbExcluirMov" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="chbMovimentacao" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="chbContasRevPagFCai" min="-2" max="-2" attributes="0"/>
@@ -288,6 +291,15 @@
               <Color blue="d2" green="d2" red="c8" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Abrir Gaveta"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="chbExcluirMov">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="d2" green="d2" red="c8" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Excluir Movimenta&#xe7;&#xf5;es"/>
+            <Property name="toolTipText" type="java.lang.String" value="Poder&#xe1; Excluir qualquer dado ligado ao Fluxo de Caixa"/>
           </Properties>
         </Component>
       </SubComponents>

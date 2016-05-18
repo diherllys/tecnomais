@@ -19,8 +19,6 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 //import jdk.nashorn.internal.parser.TokenType;
@@ -66,6 +64,10 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
         tfCodigoProduto.setVisible(false);
         preencheCamposPadrao(iniEntrada);//sequencia
         listaReserva = listProdEE;
+//        for (int i = 0; i < listaReserva.size(); i++) {
+//             System.out.println(" Removendo ao inciiar cd"+  listaReserva.get(i).getCodigoDinamico()+" cp"+listaReserva.get(i).getCodigoProduto()+" id"+ listaReserva.get(i).getId());
+//        }
+
         System.out.println("inientrada = " + iniEntrada.getSequencia());
 
         try {
@@ -146,6 +148,8 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
         jLabel8 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         tfCodigoProduto = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -236,7 +240,7 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -260,6 +264,9 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
         jScrollPane1.setViewportView(jTTabela);
         if (jTTabela.getColumnModel().getColumnCount() > 0) {
             jTTabela.getColumnModel().getColumn(0).setResizable(false);
+            jTTabela.getColumnModel().getColumn(6).setMinWidth(0);
+            jTTabela.getColumnModel().getColumn(6).setPreferredWidth(0);
+            jTTabela.getColumnModel().getColumn(6).setMaxWidth(0);
         }
 
         jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/br/tecnomais/images/addcccc.png"))); // NOI18N
@@ -477,6 +484,17 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
 
         jLabel17.setText("Nova-F5");
 
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/br/tecnomais/images/cancelarEntrada.png"))); // NOI18N
+        jLabel23.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel23.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel23MousePressed(evt);
+            }
+        });
+
+        jLabel11.setText("Cancelar-F9");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -502,6 +520,10 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel19)
                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -510,7 +532,7 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
                             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(258, 258, 258)
+                        .addGap(190, 190, 190)
                         .addComponent(tfCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
@@ -535,13 +557,15 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
                             .addComponent(lbFinanceiroB, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbEstoqueB, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel13)
                             .addComponent(jLabel15)
                             .addComponent(jLabel17)
-                            .addComponent(jLabel19))))
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel11))))
                 .addContainerGap())
         );
 
@@ -1068,7 +1092,7 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
             lbCaixa.setText(alt.retornaCaixa());
             cbOperacao.setSelectedItem(alt.retornaOperacao());
             listaProdutos = alt.retornaListProdEnt();
-
+            listaReserva = listaProdutos;
             preencherTabelaSequencia();
         }
 
@@ -1162,6 +1186,14 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
         }
     }//GEN-LAST:event_tfQuantidadeFocusLost
 
+    private void jLabel23MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MousePressed
+        if (Integer.parseInt(lbSequencia.getText()) > 0) {
+            cancelarEntrada();
+        } else {
+            new Alertas().mensagemAviso("Para ser Entrada ser cancelada deve existir uma sequência selecionada!");
+        }
+    }//GEN-LAST:event_jLabel23MousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -1201,6 +1233,7 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
     private javax.swing.JComboBox cbOperacao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -1211,6 +1244,7 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -1495,38 +1529,36 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
     }
 
     private void novaEntrada() {
-        int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente iniciar uma nova entrada!", "Opcões", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-        if (opcao == JOptionPane.YES_OPTION) {
-            cbOperacao.setEnabled(true);
-            listaProdutos.clear();
-            lbValorFinal.setText("0,00");
-            DefaultTableModel tabela = (DefaultTableModel) jTTabela.getModel();
-            tabela.setNumRows(0);
+        cbOperacao.setEnabled(true);
+        listaProdutos.clear();
+        lbValorFinal.setText("0,00");
+        DefaultTableModel tabela = (DefaultTableModel) jTTabela.getModel();
+        tabela.setNumRows(0);
 
+        statusBGravar = false;
+        statusGravacao = true;
+        statusBEstoque = false;
+        statusBFinanceiro = false;
+        Color cor = new Color(255, 255, 255);
+
+        lbStatusEstq.setBackground(cor);
+        lbStatusFinanceiro.setBackground(cor);
+
+        try {
+            EntradaDAO dao = new EntradaDAO();
+            String result = dao.selecionaFornecedor(1);
+            lbFornecedor.setText(result);
+            result = dao.selecionaCaixa(1);
+            lbCaixa.setText(result);
+            sequencia = 0;
+            lbSequencia.setText("0");
+            cbOperacao.setSelectedItem("AJUSTE DE ESTOQUE");
             statusBGravar = false;
             statusGravacao = true;
-            statusBEstoque = false;
-            statusBFinanceiro = false;
-            Color cor = new Color(255, 255, 255);
-
-            lbStatusEstq.setBackground(cor);
-            lbStatusFinanceiro.setBackground(cor);
-
-            try {
-                EntradaDAO dao = new EntradaDAO();
-                String result = dao.selecionaFornecedor(1);
-                lbFornecedor.setText(result);
-                result = dao.selecionaCaixa(1);
-                lbCaixa.setText(result);
-                sequencia = 0;
-                lbSequencia.setText("0");
-                cbOperacao.setSelectedItem("AJUSTE DE ESTOQUE");
-                statusBGravar = false;
-                statusGravacao = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     private void preencheCamposPadrao(InicializaEntradaEntity iniEntrada) {
@@ -1665,6 +1697,12 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
             novaEntradaAction();
         } else if (evt.getKeyCode() == KeyEvent.VK_F6) {
             new Alertas().mensagemAviso("Ainda não implementado, espera á proxima versão do software");
+        } else if (evt.getKeyCode() == KeyEvent.VK_F9) {
+            if (Integer.parseInt(lbSequencia.getText()) > 0) {
+                cancelarEntrada();
+            } else {
+                new Alertas().mensagemAviso("Para ser Entrada ser cancelada deve existir uma sequência selecionada!");
+            }
         }
     }
 
@@ -1768,7 +1806,26 @@ public class EntradasView extends javax.swing.JFrame implements EntradaFinanceir
             removerProdutoLista();
             cont = true;
         } else {
+            int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente iniciar uma nova entrada!", "Opcões", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+            if (opcao == JOptionPane.YES_OPTION) {
+                novaEntrada();
+            }
+        }
+    }
+
+    private void cancelarEntrada() {
+        int opcao = JOptionPane.showConfirmDialog(null, "Deseja Excluir realmente a Entrada selecionada?!", "Opcões", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+        if (opcao == JOptionPane.YES_OPTION) {
+            EntradaDAO dao = new EntradaDAO();
+//            MovimentacaoDAO movDAO = new MovimentacaoDAO();
+            for (int i = 0; i < listaReserva.size(); i++) {
+                System.out.println(" Removendo " + listaReserva.get(i).getId() + " " + listaReserva.get(i).getQuantidade());
+                dao.retirarPrtEntrada(listaReserva.get(i).getId(), listaReserva.get(i).getQuantidade());
+            }
+            System.out.println("excluir entrada DAO");
+            dao.excluirEntradaDAO(Integer.parseInt(lbSequencia.getText()));
             novaEntrada();
+            new Alertas().mensagemConfirmacao("Entrada Excluída com Sucesso!");
         }
     }
 

@@ -60,6 +60,7 @@ public class PermissoesView extends javax.swing.JFrame {
         chbEscritorio = new javax.swing.JCheckBox();
         chbCancelarVendas = new javax.swing.JCheckBox();
         chbAbrirGaveta = new javax.swing.JCheckBox();
+        chbExcluirMov = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -163,6 +164,10 @@ public class PermissoesView extends javax.swing.JFrame {
         chbAbrirGaveta.setBackground(new java.awt.Color(200, 210, 210));
         chbAbrirGaveta.setText("Abrir Gaveta");
 
+        chbExcluirMov.setBackground(new java.awt.Color(200, 210, 210));
+        chbExcluirMov.setText("Excluir Movimentações");
+        chbExcluirMov.setToolTipText("Poderá Excluir qualquer dado ligado ao Fluxo de Caixa");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -198,7 +203,8 @@ public class PermissoesView extends javax.swing.JFrame {
                                         .addComponent(chbCancelarVendas)
                                         .addComponent(chbAbrirGaveta))
                                     .addGap(28, 28, 28)))
-                            .addComponent(chbCad))))
+                            .addComponent(chbCad)
+                            .addComponent(chbExcluirMov))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -212,6 +218,8 @@ public class PermissoesView extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(chbExcluirMov)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(chbMovimentacao)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(chbContasRevPagFCai)
@@ -313,6 +321,9 @@ public class PermissoesView extends javax.swing.JFrame {
             if (pe.getAbrirGaveta() == 1) {
                 chbAbrirGaveta.setSelected(true);
             }
+            if (pe.getExcluirMov() == 1) {
+                chbExcluirMov.setSelected(true);
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -387,6 +398,7 @@ public class PermissoesView extends javax.swing.JFrame {
     private javax.swing.JCheckBox chbConfPerm;
     private javax.swing.JCheckBox chbContasRevPagFCai;
     private javax.swing.JCheckBox chbEscritorio;
+    private javax.swing.JCheckBox chbExcluirMov;
     private javax.swing.JCheckBox chbMovimentacao;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -423,6 +435,7 @@ public class PermissoesView extends javax.swing.JFrame {
         chbMovimentacao.setSelected(false);
         chbCancelarVendas.setSelected(false);
         chbAbrirGaveta.setSelected(false);
+        chbExcluirMov.setSelected(false);
     }
 
     private void save() {
@@ -460,7 +473,9 @@ public class PermissoesView extends javax.swing.JFrame {
         if (chbAbrirGaveta.isSelected() == true) {
             pe.setAbrirGaveta(1);
         }
-
+        if (chbExcluirMov.isSelected() == true) {
+            pe.setExcluirMov(1);
+        }
         pe.setIdUsuario(ue.getId());
         pDAO.salvarPerm(pe);
     }
@@ -500,6 +515,10 @@ public class PermissoesView extends javax.swing.JFrame {
 
         if (chbAbrirGaveta.isSelected() == true) {
             pe.setAbrirGaveta(1);
+        }
+
+        if (chbExcluirMov.isSelected() == true) {
+            pe.setExcluirMov(1);
         }
 
         int linha = tbUsuario.getSelectedRow();

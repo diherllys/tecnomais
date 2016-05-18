@@ -8,6 +8,8 @@ import com.br.tecnomais.dao.MovimentacaoDAO;
 import com.br.tecnomais.db.ConectaBanco;
 import com.br.tecnomais.entity.CaixaEntity;
 import com.br.tecnomais.entity.MovimentacaoEntity;
+import com.br.tecnomais.entity.PermissoesEntity;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -34,11 +37,13 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
     Double vlrTotalSaida = 0.00;
     String auxGeral;
     List<MovimentacaoEntity> movList = new ArrayList();
+    MovimentacaoEntity movAtual = new MovimentacaoEntity();
+    PermissoesEntity p;
 
     /**
      * Creates new form FluxoMovimentacao
      */
-    public FluxoMovimentacao() {
+    public FluxoMovimentacao(PermissoesEntity p) {
         initComponents();
         bOKData.setVisible(false);
         preencherTabela();
@@ -48,6 +53,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
         n.dataAtual(tfDataFinal);
         preencherCBCaixa();
         conn.conectar();
+        this.p = p;
     }
 
     @SuppressWarnings("unchecked")
@@ -57,7 +63,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tb_fluxoMov = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         lbTotal = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -80,6 +86,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -98,31 +105,53 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
         jLabel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabel2.setOpaque(true);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tb_fluxoMov.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Id Movimento", "Descrição", "Tipo de Movimento", "Valor", "Data Movimento"
+                "Id Movimento", "Descrição", "Tipo de Movimento", "Valor", "Data Movimento", "Id Venda", "Id Entrada", "Id Conta", "Id Conta Pagas"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(300);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
+        tb_fluxoMov.getTableHeader().setReorderingAllowed(false);
+        tb_fluxoMov.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tb_fluxoMovMousePressed(evt);
+            }
+        });
+        tb_fluxoMov.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tb_fluxoMovKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tb_fluxoMov);
+        if (tb_fluxoMov.getColumnModel().getColumnCount() > 0) {
+            tb_fluxoMov.getColumnModel().getColumn(0).setResizable(false);
+            tb_fluxoMov.getColumnModel().getColumn(1).setResizable(false);
+            tb_fluxoMov.getColumnModel().getColumn(1).setPreferredWidth(300);
+            tb_fluxoMov.getColumnModel().getColumn(2).setResizable(false);
+            tb_fluxoMov.getColumnModel().getColumn(3).setResizable(false);
+            tb_fluxoMov.getColumnModel().getColumn(4).setResizable(false);
+            tb_fluxoMov.getColumnModel().getColumn(5).setMinWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(5).setPreferredWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(5).setMaxWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(6).setMinWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(6).setPreferredWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(6).setMaxWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(7).setMinWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(7).setPreferredWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(7).setMaxWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(8).setMinWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(8).setPreferredWidth(0);
+            tb_fluxoMov.getColumnModel().getColumn(8).setMaxWidth(0);
         }
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -215,6 +244,13 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Excluir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -237,10 +273,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(115, 115, 115)
-                                .addComponent(bOKData))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
@@ -264,11 +297,16 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(cbFormaPag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cbTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(cbTipoMov, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(115, 115, 115)
+                                .addComponent(bOKData)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -301,7 +339,9 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
                     .addComponent(cbFormaPag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(bOKData)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bOKData)
+                    .addComponent(jButton1))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
@@ -417,8 +457,37 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
     }//GEN-LAST:event_tfDataFinalActionPerformed
 
     private void tfDataInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfDataInicialActionPerformed
-      preencherTabelaPorFiltros();
+        preencherTabelaPorFiltros();
     }//GEN-LAST:event_tfDataInicialActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (p.getExcluirMov() == 1) {
+            if (tb_fluxoMov.getSelectedRow() > -1) {
+                int opcao = JOptionPane.showConfirmDialog(null, "Deseja Excluir a movimentação?", "Opcões", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+                if (opcao == JOptionPane.YES_OPTION) {
+                    excluirMov();
+                    preencherTabelaPorFiltros();
+                }
+            } else {
+                new Alertas().mensagemAviso("Selecione uma Movimentação!");
+            }
+        } else {
+            new Alertas().mensagemAviso("Você não tem permissão para excluir uma movimentação!");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tb_fluxoMovMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_fluxoMovMousePressed
+        selecionaMov();
+    }//GEN-LAST:event_tb_fluxoMovMousePressed
+
+    private void tb_fluxoMovKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tb_fluxoMovKeyPressed
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            evt.consume();
+        }
+        selecionaMov();
+
+    }//GEN-LAST:event_tb_fluxoMovKeyPressed
 
     /**
      * @param args the command line arguments
@@ -450,7 +519,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FluxoMovimentacao().setVisible(true);
+                new FluxoMovimentacao(null).setVisible(true);
             }
         });
     }
@@ -460,6 +529,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
     private javax.swing.JComboBox cbCaixa;
     private javax.swing.JComboBox cbFormaPag;
     private javax.swing.JComboBox cbTipoMov;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
@@ -480,10 +550,10 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbEntradas;
     private javax.swing.JLabel lbSaida;
     private javax.swing.JLabel lbTotal;
+    private javax.swing.JTable tb_fluxoMov;
     private javax.swing.JFormattedTextField tfDataFinal;
     private javax.swing.JFormattedTextField tfDataInicial;
     private javax.swing.JTextField tfDescricao;
@@ -491,11 +561,11 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
 
     private void preencherTabela() {
         try {
-            DefaultTableModel tb = (DefaultTableModel) jTable1.getModel();
+            DefaultTableModel tb = (DefaultTableModel) tb_fluxoMov.getModel();
             tb.setNumRows(0);
             for (MovimentacaoEntity mov : dao.listaFluxoCaixa()) {
 //                if (mov.getTipoMovimento().equals("Entrada")) {
-                tb.addRow(new Object[]{mov.getIdMovimento(), mov.getDescricao(), mov.getTipoMovimento(), "R$ " + new DecimalFormat("0.00").format(mov.getValor()), mov.getDataMovimento()});
+                tb.addRow(new Object[]{mov.getIdMovimento(), mov.getDescricao(), mov.getTipoMovimento(), "R$ " + new DecimalFormat("0.00").format(mov.getValor()), mov.getDataMovimento(), mov.getIdVenda(), mov.getIdEntrada(), mov.getIdConta(), mov.getIdContaPagar()});
 //                }
             }
         } catch (Exception e) {
@@ -531,7 +601,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
 
     private void preencherTabelaPorData() {
         try {
-            DefaultTableModel tb = (DefaultTableModel) jTable1.getModel();
+            DefaultTableModel tb = (DefaultTableModel) tb_fluxoMov.getModel();
             tb.setNumRows(0);
             String dataI = tfDataInicial.getText();
             String dataF = tfDataFinal.getText();
@@ -577,7 +647,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
 
     private void preencherTabelaPorDescricao() {
         try {
-            DefaultTableModel tb = (DefaultTableModel) jTable1.getModel();
+            DefaultTableModel tb = (DefaultTableModel) tb_fluxoMov.getModel();
             tb.setNumRows(0);
             String descricao = tfDescricao.getText() + "%";
             for (MovimentacaoEntity mov : dao.consultaPorDescricao(descricao)) {
@@ -592,14 +662,14 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
 
     private void preencherTabelaPorFiltros() {
         try {
-            DefaultTableModel tb = (DefaultTableModel) jTable1.getModel();
+            DefaultTableModel tb = (DefaultTableModel) tb_fluxoMov.getModel();
             tb.setNumRows(0);
             String descricao = "";
             String caixa = "";
             String tipoPag = "";
             String tipoMov = "";
             String dataInicial = "01/01/1950";
-            String dataFinal = "25/12/2090";
+            String dataFinal = "25/12/2999";
 
             if (!cbCaixa.getSelectedItem().toString().equals("...")) {
                 caixa = cbCaixa.getSelectedItem().toString();
@@ -632,7 +702,7 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
                     dataInicial, dataFinal);
             for (MovimentacaoEntity mov : movList) {
 //                if (mov.getTipoMovimento().equals("Entrada")) {
-                tb.addRow(new Object[]{mov.getIdMovimento(), mov.getDescricao(), mov.getTipoMovimento(), "R$ " + new DecimalFormat("0.00").format(mov.getValor()), mov.getDataMovimento()});
+                tb.addRow(new Object[]{mov.getIdMovimento(), mov.getDescricao(), mov.getTipoMovimento(), "R$ " + new DecimalFormat("0.00").format(mov.getValor()), mov.getDataMovimento(), mov.getIdVenda(), mov.getIdEntrada(), mov.getIdConta(), mov.getIdContaPagar()});
 //                }
                 if (mov.getTipoMovimento().equals("ENTRADA")) {
                     vlrTotalEntrada = vlrTotalEntrada + mov.getValor();
@@ -735,5 +805,32 @@ public class FluxoMovimentacao extends javax.swing.JFrame {
 
         JasperViewer jrv = new JasperViewer(jp, false);
         jrv.setVisible(true);
+    }
+
+    private void excluirMov() {
+        if (movAtual.getIdConta() != 0 || movAtual.getIdContaPagar() != 0
+                || movAtual.getIdEntrada() != 0 || movAtual.getIdVenda() != 0) {
+            new Alertas().mensagemAviso("Esta Movimentação não pode ser deletada pois esta vinculada a outra tabela");
+        } else {
+            MovimentacaoDAO dao = new MovimentacaoDAO();
+            dao.deletar(movAtual.getIdMovimento());
+            new Alertas().mensagemConfirmacao("Movimentação excluída com sucesso!");
+        }
+    }
+
+    private void selecionaMov() {
+        int linha = tb_fluxoMov.getSelectedRow();
+
+//        movAtual.setCaixa(auxGeral);
+//        movAtual.setDataMovimento(auxGeral);
+//        movAtual.setDescricao(auxGeral);
+        movAtual.setIdMovimento(Integer.parseInt(tb_fluxoMov.getValueAt(linha, 0).toString()));
+        movAtual.setIdConta(Integer.parseInt(tb_fluxoMov.getValueAt(linha, 7).toString()));
+        movAtual.setIdContaPagar(Integer.parseInt(tb_fluxoMov.getValueAt(linha, 8).toString()));
+        movAtual.setIdVenda(Integer.parseInt(tb_fluxoMov.getValueAt(linha, 5).toString()));
+        movAtual.setIdEntrada(Integer.parseInt(tb_fluxoMov.getValueAt(linha, 6).toString()));
+//        movAtual.setTipoDePagamento(auxGeral);
+//        movAtual.setTipoMovimento(auxGeral);
+//        movAtual.setValor(vlrTotalSaida);
     }
 }

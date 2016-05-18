@@ -269,7 +269,7 @@ public class LancaSaidaView extends javax.swing.JFrame {
             m.setIdConta(0);
             m.setIdEntrada(0);
             m.setIdVenda(0);
-
+            m.setTipoDePagamento("DINHEIRO");
             MovimentacaoDAO dao = new MovimentacaoDAO();
             dao.gravarSaida(m);
             new Alertas().mensagemConfirmacao("Saída gravada com sucesso!");

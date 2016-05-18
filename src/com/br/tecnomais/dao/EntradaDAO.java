@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -72,7 +73,7 @@ public class EntradaDAO extends ConectaBanco {
         rs = stmt.executeQuery();
         while (rs.next()) {
             ProdutosEntradaEntity prod = new ProdutosEntradaEntity();
-            prod.setId(rs.getInt("codigoProduto"));
+            prod.setId(rs.getInt("id"));
             prod.setQuantidade(rs.getDouble("quantidade"));
             prod.setPrecoUnitario(rs.getDouble("precoUnit"));
             prod.setProdutoServico(rs.getString("descricao"));
@@ -575,6 +576,105 @@ public class EntradaDAO extends ConectaBanco {
 
             stmt.executeUpdate();
             stmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void excluirEntradaDAO(Integer seq) {
+        try {
+            conectar();
+            String sql = "delete from tb_entradas where codigoEntrada=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+
+            excluiContaPagarDAO(seq);
+            excluiContaPagasDAO(seq);
+            excluirPrtEntrada(seq);
+            excluirEntradaFinanceiro(seq);
+            excluirMovEntrada(seq);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void excluirPrtEntrada(Integer seq) {
+        try {
+            conectar();
+            String sql = "delete from tb_produtosEntrada where codigoEntrada=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void excluiContaPagarDAO(Integer seq) {
+        try {
+            conectar();
+            String sql = "delete from tb_contasPagar where entradaId=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void excluiContaPagasDAO(Integer seq) {
+        try {
+            conectar();
+            String sql = "delete from tb_contasPagas where entradaId=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void excluirEntradaFinanceiro(Integer seq) {
+        try {
+            conectar();
+            String sql = "delete from tb_entradaFinanceiro where codigoEntrada=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void retirarPrtEntrada(Integer idPrt, Double quant) {
+        try {
+            conectar();
+            String sql = "update tb_produtos set qntAtual = qntAtual - ? where id=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1, quant);
+            stmt.setInt(2, idPrt);
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+     public void excluirMovEntrada(Integer seq) {
+        try {
+            conectar();
+            String sql = "delete from tb_movimentacao where EntradaID=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, seq);
+            stmt.executeUpdate();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

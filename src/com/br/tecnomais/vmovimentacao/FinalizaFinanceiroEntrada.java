@@ -21,7 +21,7 @@ import javax.swing.JTextField;
  * @author Diherllys LL, Reginaldo Cândido
  */
 public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
-    
+
     Double valorTotal = 0.0;
     private String formaPagamento;
     private List<ProdutosVendaEntity> lista;
@@ -29,7 +29,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
     int clienteID;
     String tipoOp;
     Alertas alerta = new Alertas();
-    
+
     ClienteEntity ce;
     VendaEntity venda;
 //      VendaEntity venda = new VendaEntity();
@@ -46,7 +46,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
     EntradaFinanceiroEntity efe;
     boolean statusFinalizacao = false;
     UsuarioEntity u;
-    
+
     public FinalizaFinanceiroEntrada(InicializaEntradaEntity iniEntrada, Double vlrTotal, UsuarioEntity u) {
         try {
             initComponents();
@@ -57,62 +57,62 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             tfFocu.setVisible(false);
             //  setValorTotal();
             inicializaEntradaEntity = iniEntrada;
-            System.out.println("Caixa "+iniEntrada.getCaixa());
+            System.out.println("Caixa " + iniEntrada.getCaixa());
             tfVlrTotal.setText(new DecimalFormat("0.00").format(vlrTotal));
             tfCodigoFormaPagamento.requestFocus();
             setarValores();
             if (entradaDAO.financeiroFoiEfetivado(inicializaEntradaEntity.getSequencia())) {
                 btEfetivar.setEnabled(false);
                 efe = entradaDAO.retornaFinaceiroEntrada(inicializaEntradaEntity.getSequencia());
-                
+
                 tfFormaPagamento.setText(efe.getFormaPagamento());
                 tfFormaPagamento2.setText(efe.getFormaPagamento2());
                 tfFormaPagamento3.setText(efe.getFormaPagamento3());
-                
+
                 lbTOP.setText("Finaliza Entrada Financeiro (Efetivado)");
-                
+
                 tfFormaPagamento2.setEnabled(true);
                 tfFormaPagamento3.setEnabled(true);
                 tfVlrPago2.setEnabled(true);
                 tfVlrPago3.setEnabled(true);
                 tfIntervaloDias.setEnabled(false);
-                
+
                 tfDataVencimento.setEnabled(true);
                 tfParcelas.setEnabled(true);
                 tfParcelas.setFocusable(false);
                 tfDataVencimento.setEditable(true);
                 tfDataVencimento.setFocusable(false);
-                
+
                 tfDataVencimento.setText(tipoOp);
-                
+
                 tfDataVencimento.setText(efe.getDataVencimento());
                 tfIntervaloDias.setValue(efe.getIntervaloDias());
                 tfParcelas.setText(efe.getParcelas().toString());
-                
+
                 tfVlrPago.setText(efe.getVlrForma1() / 100 + "");
                 tfVlrPago2.setText(efe.getVlrForma2() / 100 + "");
                 tfVlrPago3.setText(efe.getVlrForma3() / 100 + "");
                 tfVlrTotal.setText(efe.getVlrTotal() / 100 + "");
-                
+
                 lbDataAtual.setText(efe.getDataEmissao());
-                
+
                 tfCodigoFormaPagamento.setEnabled(false);
                 tfCodigoFormaPagamento2.setEnabled(false);
                 tfCodigoFormaPagamento3.setEnabled(false);
-                
+
                 lbTrocoFalta.setForeground(Color.BLUE);
                 lbTrocoUnico.setForeground(Color.BLUE);
                 lbTroco.setForeground(Color.BLUE);
                 tfTroco.setForeground(Color.BLUE);
                 tfTroco.setText("0.00");
-                
+
                 tfVlrPago.setFocusable(false);
                 tfVlrPago2.setFocusable(false);
                 tfVlrPago3.setFocusable(false);
                 tfVlrParcelas.setFocusable(false);
                 tfDataVencimento.setFocusable(false);
                 tfIntervaloDias.setFocusable(false);
-                
+
                 if (tfFormaPagamento.getText().equals("CARTAO CREDITO") || tfFormaPagamento.getText().equals("PARCELADO")) {
                     Double vlrParc = (efe.getVlrTotal() / 100) / efe.getParcelas();
                     tfVlrParcelas.setText(vlrParc.toString());
@@ -123,7 +123,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                     Double vlrParc = (efe.getVlrForma3() / 100) / efe.getParcelas();
                     tfVlrParcelas.setText(vlrParc.toString());
                 }
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(FinalizaFinanceiroEntrada.class.getName()).log(Level.SEVERE, null, ex);
@@ -132,7 +132,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         }
         this.setModal(true);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -181,6 +181,11 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+        });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
             }
         });
 
@@ -274,11 +279,6 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         jLabel7.setText("Vlr. Pago:");
 
         tfVlrPago.setText("0.00");
-        tfVlrPago.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfVlrPagoFocusLost(evt);
-            }
-        });
         tfVlrPago.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tfVlrPagoMousePressed(evt);
@@ -287,6 +287,11 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         tfVlrPago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfVlrPagoActionPerformed(evt);
+            }
+        });
+        tfVlrPago.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfVlrPagoFocusLost(evt);
             }
         });
         tfVlrPago.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -817,6 +822,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 vlrParc = var1 / var2;
             }
             tfVlrParcelas.setText(new DecimalFormat("0.00").format(vlrParc));
+            btEfetivar.requestFocus();
         }
     }//GEN-LAST:event_tfParcelasActionPerformed
 
@@ -838,7 +844,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_tfParcelasKeyPressed
 
     private void tfParcelasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfParcelasKeyReleased
-        
+
         if (!tfParcelas.getText().equals("")) {
             double var1;
             double var2;
@@ -867,7 +873,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             }
             tfVlrParcelas.setText(new DecimalFormat("0.00").format(vlrParc));
         }
-        
+
 
     }//GEN-LAST:event_tfParcelasKeyReleased
 
@@ -1384,6 +1390,12 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
     private void btEfetivarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btEfetivarKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_TAB) {
             tfCodigoFormaPagamento.requestFocus();
+        } else if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (Double.parseDouble(tfTroco.getText().replace(",", ".")) > 0.00) {
+                new Alertas().mensagemAviso("Valor pago é menor que o valor a ser pago");
+            } else {
+                finalizarVendaOp();
+            }
         }
         atalhos(evt);
     }//GEN-LAST:event_btEfetivarKeyPressed
@@ -1448,6 +1460,10 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tfCodigoFormaPagamento3KeyTyped
 
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        atalhos(evt);
+    }//GEN-LAST:event_formKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -1462,7 +1478,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                    
+
                 }
             }
         } catch (ClassNotFoundException ex) {
@@ -1529,7 +1545,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
     private void setValorTotal() {
         tfVlrTotal.setText(new DecimalFormat("0.00").format(venda.getVlrTotal() / 100));
     }
-    
+
     private void setStatusCampos() {
         int cod = Integer.parseInt(tfCodigoFormaPagamento.getText());
         switch (cod) {
@@ -1543,7 +1559,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 break;
         }
     }
-    
+
     private void setStatusCampos2() {
         int cod = Integer.parseInt(tfCodigoFormaPagamento2.getText());
         switch (cod) {
@@ -1566,7 +1582,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 break;
         }
     }
-    
+
     private void setStatusCampos3() {
         int cod = Integer.parseInt(tfCodigoFormaPagamento2.getText());
         switch (cod) {
@@ -1586,7 +1602,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 break;
         }
     }
-    
+
     private void finalizaVenda() {
         try {
             VendaEntity v = new VendaEntity();
@@ -1604,41 +1620,41 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             v.setStatus("F");
             v.setClienteID(clienteID);
             v.setDataVenda(lbDataAtual.getText());
-            
+
             if (tfVlrPago2.getText().equals("")) {
                 v.setVlrForma2(0.00);
             } else {
                 v.setVlrForma2(Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", "")));
             }
-            
+
             if (tfVlrPago3.getText().equals("")) {
                 v.setVlrForma3(0.00);
             } else {
                 v.setVlrForma3(Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", "")));
             }
-            
+
             v.setVlrForma1(Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", "")));
-            
+
             if (tfParcelas.getText().equals("")) {
                 v.setParcelas(1);
             } else {
                 v.setParcelas(Integer.parseInt(tfParcelas.getText()));
             }
-            
+
             String hora = String.valueOf(new SimpleDateFormat("HH:mm").format(new Date(System.currentTimeMillis())));
             v.setHora(hora);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     public void finalizaVendaParcelado() {
         try {
             VendaEntity v = new VendaEntity();
             v.setCaixa(venda.getCaixa());
             v.setVendedor(venda.getVendedor());
-            
+
             if (tfFormaPagamento.getText().equals("CARTÃO CREDITO")) {
                 v.setFormaPagamento(tfFormaPagamento.getText() + " x" + tfParcelas.getText());
                 v.setStatus("F");
@@ -1646,7 +1662,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 v.setStatus("A");
                 v.setFormaPagamento(tfFormaPagamento.getText());
             }
-            
+
             v.setFormaPagamento2(tfFormaPagamento2.getText().replace("CARTÃO", "CARTAO"));
             v.setFormaPagamento3(tfFormaPagamento3.getText().replace("CARTÃO", "CARTAO"));
             v.setOperacao(venda.getOperacao());
@@ -1655,7 +1671,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             v.setVlrTotal(vlrTotal);
             v.setClienteID(clienteID);
             v.setDataVenda(lbDataAtual.getText());
-            
+
             if (Double.parseDouble(tfVlrPago.getText()) > 0 && (Integer.parseInt(tfCodigoFormaPagamento.getText()) == 2)) {
                 v.setVlrForma2(venda.getVlrForma2());
                 v.setFormaPagamento2("DINHEIRO");
@@ -1676,15 +1692,15 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             } else {
                 v.setParcelas(Integer.parseInt(tfParcelas.getText()));
             }
-            
+
             String hora = String.valueOf(new SimpleDateFormat("HH:mm").format(new Date(System.currentTimeMillis())));
             v.setHora(hora);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     public void finalizaVendaAVista() {
         double troco = Double.parseDouble(lbTroco.getText().replace(",", "."));
         if (troco >= 0) {
@@ -1694,16 +1710,16 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         } else if (troco < 0) {
             new Alertas().mensagemAviso("Troco não pode ser negativo!");
         }
-        
+
     }
-    
+
     private double getValorParcela() {
         int parc = Integer.parseInt(tfParcelas.getText());
         double vlrTotal = Double.parseDouble(tfVlrTotal.getText().replace(",", ".").replace(".", ""));
         double valorParc = vlrTotal / parc;
         return valorParc;
     }
-    
+
     public void formaPagamentoTf(JTextField codtf, JTextField tf) {
         if (codtf.getName().equals("tfCodigoFormaPagamento")) {
             if (codtf.getText().replace(" ", "").equals("1")) {
@@ -1755,10 +1771,9 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private void atalhos(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_F12) {
-            
             if (Double.parseDouble(tfTroco.getText().replace(",", ".")) > 0.00) {
                 new Alertas().mensagemAviso("Valor pago é menor que o valor a ser pago");
             } else {
@@ -1769,7 +1784,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             this.dispose();
         }
     }
-    
+
     public void fluxoNovinhaNoGrau() {
         try {
             VendaDAO daoVenda = new VendaDAO();
@@ -1782,7 +1797,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             mov.setTipoMovimento("ENTRADA");
             Double vlrRecebido = 0.0;
             Double troco = Double.parseDouble(lbTroco.getText().replace(",", ".").replace(".", ""));
-            
+
             if (tfFormaPagamento.equals("DINHEIRO") && troco >= 0) {
                 mov.setValor(Double.valueOf(tfVlrTotal.getText().replace(",", ".").replace(".", "")));
             } else {
@@ -1804,7 +1819,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             e.printStackTrace();
         }
     }
-    
+
     private void imprimirCupomBematech(int i) {
         String tipoDeVenda = "";
         String auxCodigo = "";
@@ -1813,7 +1828,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         String esp1 = "            ";//12
 
         ProdutosVendaEntity auxP = new ProdutosVendaEntity();
-        
+
         auxP = lista.get(i);
         auxCodigo = auxP.getCodigoProduto().toString();
         auxQuant = auxP.getQuantidade().toString();
@@ -1821,16 +1836,16 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         dll.BematechTX(auxP.getProdutoServico() + "\n" + auxCodigo + " " + esp1 + "   " + auxQuant + "     R$" + new DecimalFormat("0.00").format(Double.parseDouble(auxPrecoUn) / 100) + "   R$" + new DecimalFormat("0.00").format(auxP.getPrecoTotal() / 100) + "\n");
         valorTotal += auxP.getPrecoTotal() / 100;
     }
-    
+
     public void finalizarVendaOp() {
         try {
-            
+
             EntradaFinanceiroEntity efe = new EntradaFinanceiroEntity();
             efe.setCaixa(inicializaEntradaEntity.getCaixa());
             efe.setFornecedor(inicializaEntradaEntity.getFornecedor());
             efe.setOperacao(inicializaEntradaEntity.getOperacao());
             efe.setCodigoEntrada(inicializaEntradaEntity.getSequencia());
-            
+
             if (tfFormaPagamento.getText().equals("DINHEIRO") && tfFormaPagamento2.getText().equals("")) {
 //                String dataVenc = data.adicionaDias(data.dataAtual(), Integer.parseInt(tfIntervaloDias.getValue().toString()));
                 efe.setDataVencimento(data.dataAtual());
@@ -1850,65 +1865,65 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
 //                efe.setDataVencimento(dataVenc);
 //            }
             efe.setDataEmissao(data.dataAtual());
-            
+
             efe.setIntervaloDias(Integer.parseInt(tfIntervaloDias.getValue().toString()));
             efe.setUsuario("USUARIO");
             efe.setDescricao("ENTRADA");
             efe.setStatus("ABERTO");
-            
+
             efe.setFormaPagamento(tfFormaPagamento.getText());
             efe.setFormaPagamento2(tfFormaPagamento2.getText());
             efe.setFormaPagamento3(tfFormaPagamento3.getText());
             efe.setParcelas(Integer.parseInt(tfParcelas.getText()));
-            
+
             efe.setHora("10:10");
-            
+
             efe.setVlrForma1(Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", "")));
             if (!tfVlrPago2.getText().isEmpty()) {
                 efe.setVlrForma2(Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", "")));
             } else {
                 efe.setVlrForma2(0.0);
             }
-            
+
             if (!tfVlrPago3.getText().isEmpty()) {
                 efe.setVlrForma3(Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", "")));
             } else {
                 efe.setVlrForma3(0.0);
             }
             efe.setVlrTotal(Double.parseDouble(tfVlrTotal.getText().replace(",", ".").replace(".", "")));
-            
+
             EntradaDAO eDAO = new EntradaDAO();
             eDAO.finalizaFinaceiroEntrada(efe);
             eDAO.atualizaStatusFinanceiro(inicializaEntradaEntity.getSequencia(), "FINALIZADO");
-            
+
             new Alertas().mensagemConfirmacao("Financeiro efetivado com sucesso!");
             btEfetivar.setEnabled(false);
             tfCodigoFormaPagamento.setEnabled(false);
             tfCodigoFormaPagamento2.setEnabled(false);
             tfCodigoFormaPagamento3.setEnabled(false);
-            
+
             tfCodigoFormaPagamento.setText("");
             tfCodigoFormaPagamento2.setText("");
             tfCodigoFormaPagamento3.setText("");
             statusFinalizacao = true;
-            
+
             lbTOP.setText("Finaliza Entrada Financeiro (Efetivado)");
 
             //contas a pagar
             ContasPagarEntity cpe = new ContasPagarEntity();
             cpe.setDataEmissao(data.dataAtual());
             cpe.setStatus("ON");
-            
+
             if (u == null) {
                 cpe.setUsuario("UNKNOW");
             } else {
                 cpe.setUsuario(u.getId() + "-" + u.getNome_usuario());
             }
-            
+
             cpe.setEntradaId(inicializaEntradaEntity.getSequencia());
             cpe.setFornecedor(inicializaEntradaEntity.getFornecedor());
             cpe.setObs("REFERENTE A ENTRADA DE MERCADORIA COM A SEQUENCIA: Nº: " + cpe.getEntradaId().toString());
-            
+
             ContasPagasEntity cpee = new ContasPagasEntity();
             cpee.setDataPagamento(data.dataAtual());
             cpee.setUsuario(cpe.getUsuario());
@@ -1916,10 +1931,10 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             cpee.setFornecedor(inicializaEntradaEntity.getFornecedor());
             cpee.setCaixa(inicializaEntradaEntity.getCaixa());
             cpee.setObs("REFERENTE AO PAGAMENTO DA ENTRADA DE MERCADORIA COM A SEQUENCIA: Nº: " + cpe.getEntradaId().toString());
-            
+
             ContaPagarDAO cpDAO = new ContaPagarDAO();
             ContasPagasDAO cpeeDAO = new ContasPagasDAO();
-            
+
             Integer intervalo = Integer.parseInt(tfParcelas.getText());
             if (tfFormaPagamento.getText().equals("DINHEIRO")) {
                 cpee.setTipoCobranca("DINHEIRO");
@@ -1929,7 +1944,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 cpee.setDescricao("PAGAMENTO DE MERCADORIAS");
                 cpeeDAO.save(cpee);
                 efetivaMovimentacaoDeEntrada(valorD, "DINHEIRO");
-                
+
                 if (tfFormaPagamento2.getText().equals("PARCELADO") || tfFormaPagamento3.getText().equals("PARCELADO")) {
                     String novoVenc = tfDataVencimento.getText();
                     for (int i = 0; i < intervalo; i++) {
@@ -1986,7 +2001,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                     cpeeDAO.save(cpee);
                 }
                 for (int i = 0; i < intervalo; i++) {
-                    
+
                     cpe.setDataVencimento(novoVenc);
                     cpe.setTipoCobranca("PRAZO");
                     Double valor = Double.parseDouble(tfVlrParcelas.getText().replace(",", ".").replace(".", ""));
@@ -2013,7 +2028,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 cpee.setDataVencimento(cpee.getDataPagamento());
                 cpeeDAO.save(cpee);
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2160,7 +2175,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         this.nomeCli = nome;
         this.clienteID = cliId;
     }
-    
+
     public String retornaPag1() {
         if (!tfFormaPagamento.getText().isEmpty()) {
             return tfFormaPagamento.getText();
@@ -2168,7 +2183,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             return "";
         }
     }
-    
+
     public String retornaPag2() {
         if (!tfFormaPagamento2.getText().isEmpty()) {
             return tfFormaPagamento2.getText();
@@ -2176,7 +2191,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             return "";
         }
     }
-    
+
     public String retornaPag3() {
         if (!tfFormaPagamento3.getText().isEmpty()) {
             return tfFormaPagamento3.getText();
@@ -2184,7 +2199,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             return "";
         }
     }
-    
+
     public Double retornaVal1() {
         Double var1 = Double.parseDouble(tfVlrTotal.getText().replace(",", "."));
         Double var2 = Double.parseDouble(tfVlrPago.getText().replace(",", "."));
@@ -2196,7 +2211,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             return 0.0;
         }
     }
-    
+
     public Double retornaVal2() {
         if (!tfVlrPago2.getText().isEmpty()) {
             return Double.parseDouble(tfVlrPago2.getText().replace(",", "."));
@@ -2204,7 +2219,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             return 0.0;
         }
     }
-    
+
     public Double retornaVal3() {
         if (!tfVlrPago3.getText().isEmpty()) {
             return Double.parseDouble(tfVlrPago3.getText().replace(",", "."));
@@ -2212,15 +2227,15 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             return 0.0;
         }
     }
-    
+
     public String retornaDataVenc() {
         return tfDataVencimento.getText();
     }
-    
+
     public Double vlrParcela() {
         return Double.parseDouble(tfVlrParcelas.getText().replace(",", "."));
     }
-    
+
     private void setarValores() {
 //        nomeCli = this.ce.getNome();
 //        cpfCli = this.ce.getCnpjOuCpf();
@@ -2228,20 +2243,20 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
 
         data.dataAtual(lbDataAtual);
         tfVlrTotal.setFocusable(false);
-        
+
         tfCodigoFormaPagamento2.setEnabled(false);
         tfFormaPagamento2.setEnabled(false);
         tfVlrPago2.setEnabled(false);
-        
+
         tfCodigoFormaPagamento3.setEnabled(false);
         tfFormaPagamento3.setEnabled(false);
         tfVlrPago3.setEnabled(false);
-        
+
         lbTroco.setFocusable(false);
         tfTroco.setEnabled(true);
         tfTroco.setFocusable(false);
     }
-    
+
     private void codigoFormaPagamento() {
         tfVlrParcelas.setText("0,00");
         if (tfCodigoFormaPagamento.getText().isEmpty()) {
@@ -2269,7 +2284,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                         tfCodigoFormaPagamento2.setEnabled(false);
                         tfVlrPago2.setText("");
                         tfVlrPago2.setEnabled(false);
-                        
+
                         tfFormaPagamento3.setText("");
                         tfFormaPagamento3.setEnabled(false);
                         tfCodigoFormaPagamento3.setText("");
@@ -2311,7 +2326,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private void codigoFormaPagamento2() {
         if (tfCodigoFormaPagamento2.getText().isEmpty()) {
             alerta.mensagemAviso("Digite um codigo de pagamento!");
@@ -2323,7 +2338,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             } else {
                 tfCodigoFormaPagamento2.setName("tfCodigoFormaPagamento2");
                 formaPagamentoTf(tfCodigoFormaPagamento2, tfFormaPagamento2);
-                
+
                 setStatusCampos2();
                 tfVlrPago2.requestFocus();
                 Double aux = Double.parseDouble(tfVlrTotal.getText().replace(",", ".")) - Double.parseDouble(tfVlrPago.getText().replace(",", "."));
@@ -2356,10 +2371,10 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 }
                 tfVlrPago2.selectAll();
             }
-            
+
         }
     }
-    
+
     private void codigoFormaPagamento3() {
         if (tfCodigoFormaPagamento3.getText().isEmpty()) {
             alerta.mensagemAviso("Digite um codigo de pagamento!");
@@ -2371,7 +2386,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             } else {
                 tfCodigoFormaPagamento3.setName("tfCodigoFormaPagamento3");
                 formaPagamentoTf(tfCodigoFormaPagamento3, tfFormaPagamento3);
-                
+
                 if (tfCodigoFormaPagamento3.getText().equals("2")) {
                     tfParcelas.setText("1");
                     NovaData nd = new NovaData();
@@ -2391,7 +2406,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
 //                    tfParcelas.setText("");
 //                    tfDataVencimento.setText("");
                 }
-                
+
                 setStatusCampos3();
                 tfVlrPago3.requestFocus();
                 tfVlrPago3.requestFocus();
@@ -2401,7 +2416,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private void valorPag1() {
         Double vlrTotalNormal = Double.parseDouble(tfVlrPago.getText().replace(",", "."));
         tfVlrPago.setText(new DecimalFormat("0.00").format(vlrTotalNormal).replace(",", "."));
@@ -2410,7 +2425,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         double troco = vlrPago - vlrTotal;
         tfTroco.setText(new DecimalFormat("0.00").format(troco / 100).replace(",", "."));
         lbTroco.setText(new DecimalFormat("0.00").format(troco / 100));
-        
+
         if (tfCodigoFormaPagamento.getText().equals("1")) {
 //            if (!tfVlrPago2.getText().isEmpty() && tfFormaPagamento2.isEnabled()) {
 //                vlrPago = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""))
@@ -2423,40 +2438,41 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             if (vlrTotal < vlrPago || vlrTotal == vlrPago) {
                 lbTroco.setForeground(Color.BLUE);
                 lbTrocoFalta.setForeground(Color.BLUE);
-                
+
                 lbTrocoFalta.setText("Troco");
                 lbTrocoUnico.setText("Troco");
-                
+
                 lbTrocoUnico.setText("Troco");
                 lbTrocoUnico.setForeground(Color.BLUE);
-                
+
                 tfFormaPagamento2.setEnabled(false);
                 tfCodigoFormaPagamento2.setEnabled(false);
                 tfVlrPago2.setEnabled(false);
                 tfFormaPagamento2.setText("");
                 tfCodigoFormaPagamento2.setText("");
                 tfVlrPago2.setText("");
-                
+
                 tfFormaPagamento3.setEnabled(false);
                 tfCodigoFormaPagamento3.setEnabled(false);
                 tfVlrPago3.setEnabled(false);
                 tfFormaPagamento3.setText("");
                 tfCodigoFormaPagamento3.setText("");
                 tfVlrPago3.setText("");
-                
+
+                btEfetivar.requestFocus();
             } else {
                 //  lbTrocoUnico.setText("Falta");
                 tfFormaPagamento2.setEnabled(true);
                 tfCodigoFormaPagamento2.setEnabled(true);
                 tfVlrPago2.setEnabled(true);
                 lbTroco.setForeground(Color.red);
-                
+
                 lbTrocoFalta.setForeground(Color.red);
                 lbTrocoFalta.setText("Falta");
-                
+
                 lbTrocoUnico.setText("Falta");
                 lbTrocoUnico.setForeground(Color.red);
-                
+
                 tfCodigoFormaPagamento2.requestFocus();
             }
             tfParcelas.setEnabled(false);
@@ -2469,7 +2485,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 if (vlrTotal < vlrPago) {
                     tfVlrParcelas.setText(tfVlrTotal.getText());
                     tfVlrPago.setText(tfVlrTotal.getText());
-                    
+
                     vlrTotalNormal = Double.parseDouble(tfVlrPago.getText().replace(",", "."));
                     tfVlrPago.setText(new DecimalFormat("0.00").format(vlrTotalNormal).replace(",", "."));
                     vlrPago = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
@@ -2482,13 +2498,13 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 } else {
                     vlrCertoDaParc = Double.parseDouble(tfVlrTotal.getText().replace(",", "."));
                     tfVlrParcelas.setText(new DecimalFormat("0.00").format(vlrCertoDaParc).replace(",", "."));
-                    
+
                     lbTroco.setForeground(Color.BLUE);
                     lbTrocoFalta.setForeground(Color.BLUE);
-                    
+
                     lbTrocoFalta.setText("Troco");
                     lbTrocoUnico.setText("Troco");
-                    
+
                     lbTrocoUnico.setText("Troco");
                     lbTrocoUnico.setForeground(Color.BLUE);
                 }
@@ -2499,20 +2515,20 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 } else {
                     vlrCertoDaParc = Double.parseDouble(tfVlrTotal.getText().replace(",", "."));
                 }
-                
+
                 tfVlrParcelas.setText(new DecimalFormat("0.00").format(vlrCertoDaParc).replace(",", "."));
                 lbTroco.setForeground(Color.red);
-                
+
                 lbTrocoFalta.setForeground(Color.red);
                 lbTrocoFalta.setText("Falta");
-                
+
                 lbTrocoUnico.setText("Falta");
                 lbTrocoUnico.setForeground(Color.red);
             }
-            
+
         }
     }
-    
+
     private void valorPag2() {
         Double vlrTotalNormal = Double.parseDouble(tfVlrPago2.getText().replace(",", "."));
         tfVlrPago2.setText(new DecimalFormat("0.00").format(vlrTotalNormal).replace(",", "."));
@@ -2521,31 +2537,31 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
         Double vlrMaximo = Double.parseDouble(tfVlrTotal.getText().replace(",", ".")
                 .replace(".", "")) - Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
         Double vlrCamp1 = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
-        
+
         if (tfCodigoFormaPagamento2.getText().equals("2")) {
             tfParcelas.setText("1");
             tfVlrParcelas.setFocusable(false);
             tfVlrParcelas.setText(tfVlrPago2.getText());
             if (Double.parseDouble(tfTroco.getText()) > 0.0) {
-                
+
             }
         } else {
             tfParcelas.setText("");
         }
-        
+
         double vlrTotal = Double.parseDouble(tfVlrTotal.getText().replace(",", ".").replace(".", ""));
         double troco = vlrPago - vlrTotal;
         tfTroco.setText(new DecimalFormat("0.00").format(troco / 100).replace(",", "."));
         lbTroco.setText(new DecimalFormat("0.00").format(troco / 100));
-        
+
         if (tfCodigoFormaPagamento.getText().contains("1")) {
             if (vlrPago >= vlrTotal) {
                 if (vlrPago > vlrTotal) {
                     //tfVlrParcelas.setText(tfVlrTotal.getText());
                     Double vlr = Double.parseDouble(tfVlrTotal.getText().replace(",", ".").replace(".", "")) - Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
-                    
+
                     tfVlrPago2.setText(new DecimalFormat("0.00").format(vlrMaximo / 100).replace(",", "."));
-                    
+
                     troco = vlrTotal - (vlrMaximo + vlrCamp1);
                     tfTroco.setText(new DecimalFormat("0.00").format(troco / 100).replace(",", "."));
                     lbTroco.setText(new DecimalFormat("0.00").format(troco / 100));
@@ -2554,39 +2570,39 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                         tfVlrParcelas.setText(new DecimalFormat("0.00").format(vlrMaximo / 100));
                         System.out.println("Ali tbm: " + tfVlrParcelas.getText());
                     }
-                    
+
                     lbTroco.setForeground(Color.BLUE);
                     lbTrocoFalta.setText("Troco");
                     lbTrocoFalta.setForeground(Color.BLUE);
-                    
+
                     lbTrocoUnico.setText("Troco");
                     lbTrocoUnico.setForeground(Color.BLUE);
-                    
+
                     if (Integer.parseInt(tfCodigoFormaPagamento2.getText()) == 2) {
                         tfParcelas.requestFocus();
                     } else {
                         btEfetivar.requestFocus();
                     }
-                    
+
                 } else {
                     System.out.println("entrou no else: " + tfVlrParcelas.getText());
                     tfTroco.setText(new DecimalFormat("0.00").format(troco / 100).replace(",", "."));
                     lbTroco.setText(new DecimalFormat("0.00").format(troco / 100));
-                    
+
                     lbTroco.setForeground(Color.BLUE);
                     lbTrocoFalta.setText("Troco");
                     lbTrocoFalta.setForeground(Color.BLUE);
-                    
+
                     lbTrocoUnico.setText("Troco");
                     lbTrocoUnico.setForeground(Color.BLUE);
-                    
+
                     tfFormaPagamento3.setEnabled(false);
                     tfCodigoFormaPagamento3.setEnabled(false);
                     tfVlrPago3.setEnabled(false);
                     tfFormaPagamento3.setText("");
                     tfCodigoFormaPagamento3.setText("");
                     tfVlrPago3.setText("");
-                    
+
                     if (Integer.parseInt(tfCodigoFormaPagamento2.getText()) == 2) {
                         tfParcelas.requestFocus();
                     } else {
@@ -2601,10 +2617,10 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 lbTroco.setForeground(Color.red);
                 lbTrocoFalta.setText("Falta");
                 lbTrocoFalta.setForeground(Color.red);
-                
+
                 lbTrocoUnico.setText("Falta");
                 lbTrocoUnico.setForeground(Color.red);
-                
+
                 tfCodigoFormaPagamento3.requestFocus();
             }
         }
@@ -2619,16 +2635,16 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 System.out.println("caiu no if: " + tfVlrParcelas.getText());
             }
         }
-        
+
         if (!tfVlrPago3.getText().equals("")) {
             System.out.println("caiu no if 2: " + tfVlrParcelas.getText());
             vlrPago = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""))
                     + Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""))
                     + Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
         }
-        
+
     }
-    
+
     private void valorPag3() {
         if (tfCodigoFormaPagamento.getText().contains("1")) {
             Double vlrTotalNormal = Double.parseDouble(tfVlrPago3.getText().replace(",", "."));
@@ -2636,15 +2652,15 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             double vlrPago = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""))
                     + Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""))
                     + Double.parseDouble(tfVlrPago3.getText().replace(",", ".").replace(".", ""));
-            
+
             double vlrTotal = Double.parseDouble(tfVlrTotal.getText().replace(",", ".").replace(".", ""));
             double troco = vlrPago - vlrTotal;
             tfTroco.setText(new DecimalFormat("0.00").format(troco / 100).replace(",", "."));
             lbTroco.setText(new DecimalFormat("0.00").format(troco / 100));
-            
+
             Double vlrMaximo = Double.parseDouble(tfVlrTotal.getText().replace(",", ".")
                     .replace(".", "")) - (Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", "")) + Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", "")));
-            
+
             Double vlrCamp1 = Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
             Double vlrCamp2 = Double.parseDouble(tfVlrPago2.getText().replace(",", ".").replace(".", ""));
 
@@ -2656,9 +2672,9 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 if (vlrTotal < vlrPago) {
                     //  tfVlrParcelas.setText(tfVlrTotal.getText());
                     Double vlr = Double.parseDouble(tfVlrTotal.getText().replace(",", ".").replace(".", "")) - Double.parseDouble(tfVlrPago.getText().replace(",", ".").replace(".", ""));
-                    
+
                     tfVlrPago3.setText(new DecimalFormat("0.00").format(vlrMaximo / 100).replace(",", "."));
-                    
+
                     troco = vlrTotal - (vlrMaximo + vlrCamp1 + vlrCamp2);
                     tfTroco.setText(new DecimalFormat("0.00").format(troco / 100).replace(",", "."));
                     lbTroco.setText(new DecimalFormat("0.00").format(troco / 100));
@@ -2668,14 +2684,14 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                     lbTroco.setForeground(Color.BLUE);
                     lbTrocoFalta.setText("Troco");
                     lbTrocoFalta.setForeground(Color.BLUE);
-                    
+
                     lbTrocoUnico.setText("Troco");
                     lbTrocoUnico.setForeground(Color.BLUE);
                 } else {
                     lbTroco.setForeground(Color.BLUE);
                     lbTrocoFalta.setText("Troco");
                     lbTrocoFalta.setForeground(Color.BLUE);
-                    
+
                     lbTrocoUnico.setText("Troco");
                     lbTrocoUnico.setForeground(Color.BLUE);
                 }
@@ -2683,7 +2699,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 lbTroco.setForeground(Color.red);
                 lbTrocoFalta.setText("Falta");
                 lbTrocoFalta.setForeground(Color.red);
-                
+
                 lbTrocoUnico.setText("Falta");
                 lbTrocoUnico.setForeground(Color.red);
             }
@@ -2692,13 +2708,13 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
                 tfVlrParcelas.setText(tfVlrPago3.getText());
             }
         }
-        
+
     }
-    
+
     public boolean retornaStatus() {
         return statusFinalizacao;
     }
-    
+
     private void efetivaMovimentacaoDeEntrada(Double valorTotal, String tipoPagamento) {
         try {
             MovimentacaoEntity mov = new MovimentacaoEntity();
@@ -2708,7 +2724,7 @@ public class FinalizaFinanceiroEntrada extends javax.swing.JDialog {
             mov.setTipoMovimento("SAIDA");
             mov.setValor(valorTotal);
             mov.setDataMovimento(lbDataAtual.getText());
-            System.out.println(" Caixa "+inicializaEntradaEntity.getCaixa());
+            System.out.println(" Caixa " + inicializaEntradaEntity.getCaixa());
             mov.setCaixa(inicializaEntradaEntity.getCaixa());
             mov.setTipoDePagamento(tipoPagamento);
             MovimentacaoDAO dao = new MovimentacaoDAO();

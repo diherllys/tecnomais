@@ -462,7 +462,7 @@ public class MovimentacaoView extends javax.swing.JFrame {
 
     private void lbFluxoCaixaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbFluxoCaixaMousePressed
         if (p.getMovContRecbPagFlxCaixa() == 1) {
-            new FluxoMovimentacao().setVisible(true);
+            new FluxoMovimentacao(p).setVisible(true);
         } else {
             alerta.mensagemAviso("Você não tem permissão de acesso!");
         }
@@ -490,7 +490,7 @@ public class MovimentacaoView extends javax.swing.JFrame {
 
     private void lbContasPagarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbContasPagarMousePressed
         if (p.getMovContRecbPagFlxCaixa() == 1) {
-            new ContasApagar(0, u).setVisible(true);
+            new ContasApagar(0, u, p).setVisible(true);
         } else {
             alerta.mensagemAviso("Você não tem permissão de acesso!");
         }
@@ -537,7 +537,7 @@ public class MovimentacaoView extends javax.swing.JFrame {
     }//GEN-LAST:event_lbRelatoriosMousePressed
 
     private void lbContaPgasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbContaPgasMousePressed
-        new ContasPagasView().setVisible(true);
+        new ContasPagasView(p).setVisible(true);
     }//GEN-LAST:event_lbContaPgasMousePressed
 
     private void lbContaPgasMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbContaPgasMouseExited

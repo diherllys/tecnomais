@@ -398,8 +398,12 @@ public class InicializaEntradaView extends javax.swing.JFrame {
                     ProdutosVendaDAO pvDAO = new ProdutosVendaDAO();
                     listProdEntra = eDAO.listaProdutosEntradaPorSequencia(Integer.parseInt(tfBuscaSequencia.getText()));
                     for (ProdutosEntradaEntity pee : listProdEntra) {
-                        System.out.println(pee.getCodigoProduto());
+                        System.out.println(pee.getId());
                     }
+//                    for (int i = 0; i < listProdEntra.size(); i++) {
+//                        System.out.println(" Removendo ao inciiar cd" + listProdEntra.get(i).getCodigoDinamico() + " cp" + listProdEntra.get(i).getCodigoProduto() + " id" + listProdEntra.get(i).getId());
+//                    }
+
                     sequencia = Integer.parseInt(tfBuscaSequencia.getText());
                     bComecar.requestFocus();
                 } else {

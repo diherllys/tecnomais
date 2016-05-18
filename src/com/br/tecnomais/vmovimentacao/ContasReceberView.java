@@ -275,57 +275,61 @@ public class ContasReceberView extends javax.swing.JFrame {
     }//GEN-LAST:event_tbTabelaMousePressed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            if (tfId.getText().isEmpty() && !cbCaixa.getSelectedItem().toString().equals("...")) {
-                new Alertas().mensagemAviso("Selecione um Caixa!");
-            } else {
-                int opcao = JOptionPane.showConfirmDialog(null, "Deseja receber o pagamento?", "Pergunta",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-                if (opcao == JOptionPane.YES_OPTION) {
-                    ContasReceberEntity cre = new ContasReceberEntity();
-                    NovaData nv = new NovaData();
-                    cre.setQuantidadeParcelas(Integer.parseInt(tfNumParcelas.getText()));
-                    cre.setContaID(Integer.parseInt(tfId.getText()));
+        if (!cbCaixa.getSelectedItem().toString().equals("...")) {
+            try {
+                if (tfId.getText().isEmpty() && !cbCaixa.getSelectedItem().toString().equals("...")) {
+                    new Alertas().mensagemAviso("Selecione um Caixa!");
+                } else {
+                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja receber o pagamento?", "Pergunta",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+                    if (opcao == JOptionPane.YES_OPTION) {
+                        ContasReceberEntity cre = new ContasReceberEntity();
+                        NovaData nv = new NovaData();
+                        cre.setQuantidadeParcelas(Integer.parseInt(tfNumParcelas.getText()));
+                        cre.setContaID(Integer.parseInt(tfId.getText()));
 
-                    if (tfValorAPagar.getText().contains("*")) {
+                        if (tfValorAPagar.getText().contains("*")) {
 
-                    } else {
-                        cre.setVlrRestante(Double.parseDouble(tfVlrRestante.getText().replace(",", ".").replace(".", ""))
-                                - Double.parseDouble(tfValorAPagar.getText().replace(",", ".").replace(".", "")));
-                    }
+                        } else {
+                            cre.setVlrRestante(Double.parseDouble(tfVlrRestante.getText().replace(",", ".").replace(".", ""))
+                                    - Double.parseDouble(tfValorAPagar.getText().replace(",", ".").replace(".", "")));
+                        }
 
-                    cre.setDataVencimento(nv.adiciona1Mes(tfVencimento.getText()));
-                    if (cre.getQuantidadeParcelas() == 1 || cre.getQuantidadeParcelas() < 1) {
-                        cre.setQuantidadeParcelas(1);
-                    } else {
-                        cre.setQuantidadeParcelas(Integer.parseInt(tfNumParcelas.getText()) - 1);
-                        System.out.println("Qnt.: " + cre.getQuantidadeParcelas());
-                    }
+                        cre.setDataVencimento(nv.adiciona1Mes(tfVencimento.getText()));
+                        if (cre.getQuantidadeParcelas() == 1 || cre.getQuantidadeParcelas() < 1) {
+                            cre.setQuantidadeParcelas(1);
+                        } else {
+                            cre.setQuantidadeParcelas(Integer.parseInt(tfNumParcelas.getText()) - 1);
+                            System.out.println("Qnt.: " + cre.getQuantidadeParcelas());
+                        }
 
-                    if (cre.getQuantidadeParcelas() > 1) {
-                        cre.setVlrParcelas((cre.getVlrRestante()) / cre.getQuantidadeParcelas());
-                    } else {
-                        cre.setVlrParcelas((cre.getVlrRestante()));
+                        if (cre.getQuantidadeParcelas() > 1) {
+                            cre.setVlrParcelas((cre.getVlrRestante()) / cre.getQuantidadeParcelas());
+                        } else {
+                            cre.setVlrParcelas((cre.getVlrRestante()));
+                        }
+                        //
+                        if (cre.getVlrRestante() == 0) {
+                            contasDAO.alteraStatusVenda(Integer.parseInt(tfVenda.getText()));
+                            contasDAO.excluirContaId(Integer.parseInt(tfId.getText()));
+                            fluxoNovinhaNoGrau();
+                            JOptionPane.showMessageDialog(null, "Baixa na parcela Realizada com sucesso!!!");
+                        } else if (cre.getVlrRestante() < 0) {
+                            new Alertas().mensagemAviso("Valor pago é maior que valor restante!");
+                        } else {
+                            contasDAO.darBaixaEmParc(cre);
+                            fluxoNovinhaNoGrau();
+                            JOptionPane.showMessageDialog(null, "Baixa na parcela Realizada com sucesso!!!");
+                        }
+                        limparCampos();
+                        mostraPesquisa();
                     }
-                    //
-                    if (cre.getVlrRestante() == 0) {
-                        contasDAO.alteraStatusVenda(Integer.parseInt(tfVenda.getText()));
-                        contasDAO.excluirContaId(Integer.parseInt(tfId.getText()));
-                        fluxoNovinhaNoGrau();
-                        JOptionPane.showMessageDialog(null, "Baixa na parcela Realizada com sucesso!!!");
-                    } else if (cre.getVlrRestante() < 0) {
-                        new Alertas().mensagemAviso("Valor pago é maior que valor restante!");
-                    } else {
-                        contasDAO.darBaixaEmParc(cre);
-                        fluxoNovinhaNoGrau();
-                        JOptionPane.showMessageDialog(null, "Baixa na parcela Realizada com sucesso!!!");
-                    }
-                    limparCampos();
-                    mostraPesquisa();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            new Alertas().mensagemAviso("Selecione um caixa para continuar!");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -457,7 +461,7 @@ public class ContasReceberView extends javax.swing.JFrame {
             mov.setValor(Double.valueOf(tfValorAPagar.getText().replace(",", ".").replace(".", "")));
             mov.setDataMovimento(lbDataHoje.getText());
             mov.setCaixa(cbCaixa.getSelectedItem().toString());
-
+            mov.setTipoDePagamento("DINHEIRO");
             mov.setIdContaPagar(0);
             mov.setIdEntrada(0);
 

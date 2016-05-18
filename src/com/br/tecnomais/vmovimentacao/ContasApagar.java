@@ -16,6 +16,7 @@ import com.br.tecnomais.entity.CaixaEntity;
 import com.br.tecnomais.entity.ContasPagarEntity;
 import com.br.tecnomais.entity.ContasPagasEntity;
 import com.br.tecnomais.entity.MovimentacaoEntity;
+import com.br.tecnomais.entity.PermissoesEntity;
 import com.br.tecnomais.entity.UsuarioEntity;
 import com.br.tecnomais.vconfiguracao.FixedLengthDocument;
 import java.awt.event.ActionEvent;
@@ -46,14 +47,15 @@ public class ContasApagar extends javax.swing.JFrame implements DocumentListener
     NovaData nd = new NovaData();
     ContasPagarEntity contasPagarEntity;
     boolean carregouCaixa = false;
+    PermissoesEntity p;
 
     /**
      * Creates new form ContasApagar
      */
-    public ContasApagar(Integer id, UsuarioEntity u) {
+    public ContasApagar(Integer id, UsuarioEntity u, PermissoesEntity p) {
         super("ContasApagar");
         initComponents();
-
+        this.p = p;
         preencherCBCaixa();
         cbCaixa.setFocusable(false);
 
@@ -647,7 +649,7 @@ public class ContasApagar extends javax.swing.JFrame implements DocumentListener
 
     private void lbPesquisaFornecedor1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPesquisaFornecedor1MousePressed
         this.dispose();
-        new ContaPagarListView(u).setVisible(true);
+        new ContaPagarListView(u, p).setVisible(true);
     }//GEN-LAST:event_lbPesquisaFornecedor1MousePressed
 
     private void tfFornecedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFornecedorKeyPressed
@@ -806,14 +808,18 @@ public class ContasApagar extends javax.swing.JFrame implements DocumentListener
     }//GEN-LAST:event_tfValoraPagarActionPerformed
 
     private void bExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExcluirActionPerformed
-        int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir a conta selecionada?", "Opcões", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-        if (opcao == JOptionPane.YES_OPTION && contasPagarEntity.getEntradaId() == 0) {
-            ContaPagarDAO contasPagarDAO = new ContaPagarDAO();
-            contasPagarDAO.deletarConta(Integer.parseInt(tfContaN.getText()));
-            limparCampos();
-            new Alertas().mensagemConfirmacao("A conta foi apaga com sucesso! Gerando uma Saída no Fluxo de Caixa Geral do Sistema");
-        } else {
-            new Alertas().mensagemAviso("A conta não pode ser excluida, pois esta vinculada a uma Entrada!");
+        if (p.getExcluirMov() ==1) {
+            int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir a conta selecionada?", "Opcões", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+            if (opcao == JOptionPane.YES_OPTION && contasPagarEntity.getEntradaId() == 0) {
+                ContaPagarDAO contasPagarDAO = new ContaPagarDAO();
+                contasPagarDAO.deletarConta(Integer.parseInt(tfContaN.getText()));
+                limparCampos();
+                new Alertas().mensagemConfirmacao("A conta foi apaga com sucesso! Gerando uma Saída no Fluxo de Caixa Geral do Sistema");
+            } else {
+                new Alertas().mensagemAviso("A conta não pode ser excluida, pois esta vinculada a uma Entrada!");
+            }
+        }else{
+            new Alertas().mensagemAviso("Você não tem permissão de acesso!");
         }
     }//GEN-LAST:event_bExcluirActionPerformed
 
@@ -889,7 +895,7 @@ public class ContasApagar extends javax.swing.JFrame implements DocumentListener
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ContasApagar(null, null).setVisible(true);
+                new ContasApagar(null, null, null).setVisible(true);
             }
         });
     }

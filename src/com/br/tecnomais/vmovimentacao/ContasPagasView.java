@@ -7,11 +7,10 @@ import com.br.tecnomais.dao.ContasPagasDAO;
 import com.br.tecnomais.dao.MovimentacaoDAO;
 import com.br.tecnomais.entity.CaixaEntity;
 import com.br.tecnomais.entity.ContasPagasEntity;
+import com.br.tecnomais.entity.PermissoesEntity;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,9 +26,11 @@ public class ContasPagasView extends javax.swing.JFrame {
      */
     int linha;
     int entradaId = 0;
+    PermissoesEntity p;
 
-    public ContasPagasView() {
+    public ContasPagasView(PermissoesEntity p) {
         initComponents();
+        this.p = p;
         this.setExtendedState(MAXIMIZED_BOTH);
         preencherTabela();
         bDevolverPag.setVisible(false);
@@ -323,24 +324,28 @@ public class ContasPagasView extends javax.swing.JFrame {
     }//GEN-LAST:event_tfDataPagamentoActionPerformed
 
     private void bDevolverPagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDevolverPagActionPerformed
-        int opcao = JOptionPane.showConfirmDialog(null, "Deseja Devolver a conta a tabela de Contas à Pagar?", "Opcões", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-        //tenho que se entrada não existir na tb_contasPagar não vai poder ser removida apenas pela entrada;
-        Integer contaPagasId = Integer.parseInt(tbContasPagas.getValueAt(linha, 0).toString());
-        Integer contaPagarId = Integer.parseInt(tbContasPagas.getValueAt(linha, 10).toString());
-        if (opcao == JOptionPane.YES_OPTION && (contaPagarId == 0 || contaPagarId == null)) {
-            ContaPagarDAO contasPagarDAO = new ContaPagarDAO();
-            ContasPagasDAO contasPagasDAO = new ContasPagasDAO();
-            MovimentacaoDAO movDAO = new MovimentacaoDAO();
-            System.out.println("conta pagar id " + contaPagarId);
-            contasPagarDAO.updateStatus(contaPagarId, "ON");
-            contasPagasDAO.deletarContaPagas(contaPagasId);
-            movDAO.deletarPorContaPagarId(contaPagarId);
-            pesquisar();
-            new Alertas().mensagemConfirmacao("A conta foi apagada com sucesso! Excluindo a Saída no Fluxo de Caixa Geral do Sistema");
-        } else {
+        if (p.getExcluirMov() == 1) {
+            int opcao = JOptionPane.showConfirmDialog(null, "Deseja Devolver a conta a tabela de Contas à Pagar?", "Opcões", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+            //tenho que se entrada não existir na tb_contasPagar não vai poder ser removida apenas pela entrada;
+            Integer contaPagasId = Integer.parseInt(tbContasPagas.getValueAt(linha, 0).toString());
+            Integer contaPagarId = Integer.parseInt(tbContasPagas.getValueAt(linha, 10).toString());
+            if (opcao == JOptionPane.YES_OPTION && (contaPagasId == 0 || contaPagasId == null)) {
+                ContaPagarDAO contasPagarDAO = new ContaPagarDAO();
+                ContasPagasDAO contasPagasDAO = new ContasPagasDAO();
+                MovimentacaoDAO movDAO = new MovimentacaoDAO();
+                System.out.println("conta pagar id " + contaPagarId);
+                contasPagarDAO.updateStatus(contaPagarId, "ON");
+                contasPagasDAO.deletarContaPagas(contaPagasId);
+                movDAO.deletarPorContaPagarId(contaPagarId);
+                pesquisar();
+                new Alertas().mensagemConfirmacao("A conta foi apagada com sucesso! Excluindo a Saída no Fluxo de Caixa Geral do Sistema");
+            } else {
 //            new Alertas().mensagemAviso("Selecione uma Conta na Tabela");
-            new Alertas().mensagemAviso("A conta não pode ser devolvida , pois foi gerada pela Tela de Entrada "
-                    + "\n só podendo ser devolvida pela Tela de Entrada!");
+                new Alertas().mensagemAviso("A conta não pode ser devolvida , pois foi gerada pela Tela de Entrada "
+                        + "\n só podendo ser devolvida pela Tela de Entrada!");
+            }
+        }else{
+            new Alertas().mensagemAviso("Você não tem permissão de acesso!");
         }
     }//GEN-LAST:event_bDevolverPagActionPerformed
 
@@ -384,7 +389,7 @@ public class ContasPagasView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ContasPagasView().setVisible(true);
+                new ContasPagasView(null).setVisible(true);
             }
         });
     }
@@ -479,7 +484,7 @@ public class ContasPagasView extends javax.swing.JFrame {
             new Alertas().mensagemErro("Erro ao executar a sql para preencher a tabela!");
         }
     }
-    
+
     public void preencherCBCaixa() {
         CaixaDAO caiDAO = new CaixaDAO();
         try {

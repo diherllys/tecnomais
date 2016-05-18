@@ -23,6 +23,7 @@ public class PermissoesEntity {
     private int escritorio;
     private int cancelarVenda;
     private int abrirGaveta;
+    private int excluirMov;
 
     public int getId() {
         return id;
@@ -126,6 +127,14 @@ public class PermissoesEntity {
 
     public void setAbrirGaveta(int abrirGaveta) {
         this.abrirGaveta = abrirGaveta;
+    }
+
+    public int getExcluirMov() {
+        return excluirMov;
+    }
+
+    public void setExcluirMov(int excluirMov) {
+        this.excluirMov = excluirMov;
     }
     
 }

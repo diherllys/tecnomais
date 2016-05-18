@@ -8,6 +8,7 @@ package com.br.tecnomais.vmovimentacao;
 import com.br.tecnomais.classes.Alertas;
 import com.br.tecnomais.dao.ContaPagarDAO;
 import com.br.tecnomais.entity.ContasPagarEntity;
+import com.br.tecnomais.entity.PermissoesEntity;
 import com.br.tecnomais.entity.UsuarioEntity;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -22,12 +23,14 @@ public class ContaPagarListView extends javax.swing.JFrame {
 
     private final ContaPagarDAO dao = new ContaPagarDAO();
     UsuarioEntity u;
+    PermissoesEntity p;
 
     /**
      * Creates new form ContaPagarListView
      */
-    public ContaPagarListView(UsuarioEntity u) {
+    public ContaPagarListView(UsuarioEntity u, PermissoesEntity p) {
         this.u = u;
+        this.p = p;
         initComponents();
         this.setExtendedState(this.MAXIMIZED_BOTH);
         ajustarTabela();
@@ -349,13 +352,13 @@ public class ContaPagarListView extends javax.swing.JFrame {
     private void bSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSelecionarActionPerformed
         if (bSelecionar.getText().equals("Retornar")) {
             this.dispose();
-            new ContasApagar(0, u).setVisible(true);
+            new ContasApagar(0, u, p).setVisible(true);
         } else {
             int linha = tbContasPagar.getSelectedRow();
             int id = Integer.parseInt(tbContasPagar.getValueAt(linha, 0).toString());
             if (id > 0) {
                 this.dispose();
-                new ContasApagar(id, u).setVisible(true);
+                new ContasApagar(id, u, p).setVisible(true);
             }
         }
     }//GEN-LAST:event_bSelecionarActionPerformed
@@ -418,7 +421,7 @@ public class ContaPagarListView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ContaPagarListView(null).setVisible(true);
+                new ContaPagarListView(null, null).setVisible(true);
             }
         });
     }

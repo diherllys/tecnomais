@@ -19,8 +19,8 @@ public class PermissoesDAO extends ConectaBanco {
         try {
             conectar();
             String sql = "insert into tb_permissoes(idUsuario, movimentacao, movContRecbPagFlxCaixa, cadastroFilial,"
-                    + " cadastroUsuario, cadastro, configurarLogo, configurarImp, configurarPerm, escritorio, cancelarVendas, abrirGaveta) "
-                    + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + " cadastroUsuario, cadastro, configurarLogo, configurarImp, configurarPerm, escritorio, cancelarVendas, abrirGaveta,excluirMov) "
+                    + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, pe.getIdUsuario());
             stmt.setInt(2, pe.getMovimentacao());
@@ -34,7 +34,7 @@ public class PermissoesDAO extends ConectaBanco {
             stmt.setInt(10, pe.getEscritorio());
             stmt.setInt(11, pe.getCancelarVenda());
             stmt.setInt(12, pe.getAbrirGaveta());
-
+            stmt.setInt(13, pe.getExcluirMov());
             stmt.executeUpdate();
             stmt.close();
 
@@ -48,7 +48,7 @@ public class PermissoesDAO extends ConectaBanco {
         try {
             conectar();
             String sql = "update tb_permissoes set movimentacao=?, movContRecbPagFlxCaixa=?, cadastroFilial=?,"
-                    + " cadastroUsuario=?, cadastro=?, configurarLogo=?, configurarImp=?, configurarPerm=?, escritorio=?, cancelarVendas=?, abrirGaveta=? where idUsuario=? ";
+                    + " cadastroUsuario=?, cadastro=?, configurarLogo=?, configurarImp=?, configurarPerm=?, escritorio=?, cancelarVendas=?, abrirGaveta=?, excluirMov=? where idUsuario=? ";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, pe.getMovimentacao());
             stmt.setInt(2, pe.getMovContRecbPagFlxCaixa());
@@ -61,7 +61,8 @@ public class PermissoesDAO extends ConectaBanco {
             stmt.setInt(9, pe.getEscritorio());
             stmt.setInt(10, pe.getCancelarVenda());
             stmt.setInt(11, pe.getAbrirGaveta());
-            stmt.setInt(12, pe.getIdUsuario());
+            stmt.setInt(12, pe.getExcluirMov());
+            stmt.setInt(13, pe.getIdUsuario());
 
             stmt.executeUpdate();
             stmt.close();
@@ -93,6 +94,7 @@ public class PermissoesDAO extends ConectaBanco {
             pe.setEscritorio(rs.getInt("escritorio"));
             pe.setCancelarVenda(rs.getInt("cancelarVendas"));
             pe.setAbrirGaveta(rs.getInt("abrirGaveta"));
+            pe.setExcluirMov(rs.getInt("excluirMov"));
             pe2 = pe;
         }
         stmt.close();

@@ -1,4 +1,3 @@
-
 package com.br.tecnomais.vmovimentacao;
 
 import com.br.tecnomais.classes.Alertas;
@@ -184,7 +183,7 @@ public class CancelarVenda extends javax.swing.JDialog {
             if (ud.logarSistema(u) == true) {
                 try {
                     p = permDAO.buscaPerm(u.getId());
-                    if (p.getCancelarVenda() == 1) {
+                    if (p.getCancelarVenda() == 1 || p.getExcluirMov() == 1) {
                         int opcao = JOptionPane.showConfirmDialog(null, "Deseja realmente cancelar a venda?", "Alerta", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null);
                         if (opcao == JOptionPane.YES_OPTION) {
                             vv.CancelarVendaEfetivada();
